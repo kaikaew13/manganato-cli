@@ -14,7 +14,7 @@ func main() {
 	defer g.Close()
 
 	g.Highlight = true
-	g.SelFgColor = gocui.ColorYellow
+	g.SelFgColor = gocui.ColorGreen
 	g.BgColor = gocui.ColorBlack
 	g.FgColor = gocui.ColorWhite
 

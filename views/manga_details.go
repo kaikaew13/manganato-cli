@@ -1,9 +1,12 @@
 package views
 
-import nato "github.com/kaikaew13/manganato-api"
+import (
+	"github.com/jroimartin/gocui"
+	nato "github.com/kaikaew13/manganato-api"
+)
 
 type MangaDetails struct {
-	BaseType
+	View        *gocui.View
 	Manga       nato.Manga
 	NameToIDMap map[string]string
 }
