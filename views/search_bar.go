@@ -23,7 +23,6 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sbView.BgColor = gocui.ColorBlack
 	sbView.FgColor = gocui.ColorWhite
 	sbView.Editable = true
-	g.SetCurrentView(SearchBarName)
 
 	sb := SearchBar{
 		View: sbView,
