@@ -14,11 +14,8 @@ type SearchBar struct {
 
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sbView, err := g.SetView(SearchBarName, 1, maxY-SearchBarHeight-1, maxX-1, maxY-1)
-	if err != nil {
-		if err != gocui.ErrUnknownView {
-			return nil, err
-		}
-		g.SetCurrentView(SearchBarName)
+	if err != nil && err != gocui.ErrUnknownView {
+		return nil, err
 	}
 
 	sbView.Title = SearchBarName
@@ -30,5 +27,5 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sb := SearchBar{
 		View: sbView,
 	}
-	return &sb, nil
+	return &sb, err
 }

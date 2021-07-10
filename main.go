@@ -16,8 +16,6 @@ var viewNames = []string{
 }
 
 func main() {
-	nato.NewSearcher()
-
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
@@ -34,6 +32,8 @@ func main() {
 	if err := keybindings(g); err != nil {
 		log.Panicln(err)
 	}
+
+	screen.searcher = nato.NewSearcher()
 
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)

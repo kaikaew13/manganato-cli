@@ -13,7 +13,7 @@ type MangaDetails struct {
 	NameToIDMap map[string]string
 }
 
-func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
+func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	mdView, err := g.SetView(MangaDetailsName, maxX/2, 1, maxX-1, ((maxY-SearchBarHeight-1)/2)-1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
@@ -24,8 +24,8 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	mdView.BgColor = gocui.ColorBlack
 	mdView.FgColor = gocui.ColorWhite
 
-	md := SearchBar{
+	md := MangaDetails{
 		View: mdView,
 	}
-	return &md, nil
+	return &md, err
 }

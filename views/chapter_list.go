@@ -13,7 +13,7 @@ type ChapterList struct {
 	NameToIDMap map[string]string
 }
 
-func GetChapterList(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
+func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView, err := g.SetView(ChapterListName, maxX/2, (maxY-SearchBarHeight-1)/2, maxX-1, maxY-SearchBarHeight-2)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
@@ -24,8 +24,8 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
 
-	cl := SearchBar{
+	cl := ChapterList{
 		View: clView,
 	}
-	return &cl, nil
+	return &cl, err
 }
