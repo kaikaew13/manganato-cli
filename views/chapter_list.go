@@ -5,8 +5,27 @@ import (
 	nato "github.com/kaikaew13/manganato-api"
 )
 
+const ChapterListName = "ChapterList"
+
 type ChapterList struct {
 	View        *gocui.View
 	Chapters    []nato.Chapter
 	NameToIDMap map[string]string
+}
+
+func GetChapterList(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
+	clView, err := g.SetView(ChapterListName, maxX/2, (maxY-SearchBarHeight-1)/2, maxX-1, maxY-SearchBarHeight-2)
+	if err != nil && err != gocui.ErrUnknownView {
+		return nil, err
+	}
+
+	clView.Title = ChapterListName
+	clView.SelFgColor = gocui.ColorGreen
+	clView.BgColor = gocui.ColorBlack
+	clView.FgColor = gocui.ColorWhite
+
+	cl := SearchBar{
+		View: clView,
+	}
+	return &cl, nil
 }

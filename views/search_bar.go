@@ -3,7 +3,7 @@ package views
 import "github.com/jroimartin/gocui"
 
 const (
-	SearchBarHeight int    = 3
+	SearchBarHeight int    = 2
 	SearchBarName   string = "SearchBar"
 )
 
@@ -13,15 +13,17 @@ type SearchBar struct {
 }
 
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
-	sbView, err := g.SetView(SearchBarName, 1, maxY-SearchBarHeight, maxX-1, maxY)
+	sbView, err := g.SetView(SearchBarName, 1, maxY-SearchBarHeight-1, maxX-1, maxY-1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
 	sbView.Title = SearchBarName
-	g.SelFgColor = gocui.ColorGreen
-	g.BgColor = gocui.ColorBlack
-	g.FgColor = gocui.ColorWhite
+	sbView.SelFgColor = gocui.ColorGreen
+	sbView.BgColor = gocui.ColorBlack
+	sbView.FgColor = gocui.ColorWhite
+	sbView.Editable = true
+	g.SetCurrentView(SearchBarName)
 
 	sb := SearchBar{
 		View: sbView,

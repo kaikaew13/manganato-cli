@@ -14,18 +14,18 @@ type SearchList struct {
 }
 
 func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
-	slView, err := g.SetView(SearchListName, 1, 1, maxX/2-1, maxY-SearchBarHeight-1)
+	slView, err := g.SetView(SearchListName, 1, 1, maxX/2-1, maxY-SearchBarHeight-2)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
 	slView.Title = SearchListName
-	g.SelFgColor = gocui.ColorGreen
-	g.BgColor = gocui.ColorBlack
-	g.FgColor = gocui.ColorWhite
+	slView.SelFgColor = gocui.ColorGreen
+	slView.BgColor = gocui.ColorBlack
+	slView.FgColor = gocui.ColorWhite
 
-	sb := SearchBar{
+	sl := SearchBar{
 		View: slView,
 	}
-	return &sb, nil
+	return &sl, nil
 }
