@@ -25,7 +25,8 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	mdView.FgColor = gocui.ColorWhite
 
 	md := MangaDetails{
-		View: mdView,
+		View:        mdView,
+		NameToIDMap: make(map[string]string),
 	}
 	return &md, err
 }

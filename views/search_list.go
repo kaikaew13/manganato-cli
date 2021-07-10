@@ -25,6 +25,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	slView.SelFgColor = gocui.ColorGreen
 	slView.BgColor = gocui.ColorBlack
 	slView.FgColor = gocui.ColorWhite
+	slView.Editable = true
 
 	sl := SearchList{
 		View:        slView,
@@ -36,14 +37,14 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 func (sl *SearchList) FormatMangas() string {
 	s := ""
 
-	// for _, mg := range sl.Mangas {
-	// 	s += fmt.Sprintf("	- %s\n		Author: %s\n		Views: %s\n\n", mg.Name, mg.Author.Name, mg.Views)
-	// 	sl.NameToIDMap[mg.Name] = mg.ID
-	// }
-
-	for i := 0; i < 10; i++ {
-		s += fmt.Sprintf("	- %s\n		Author: %s\n\n", "nice", "not nice")
+	for _, mg := range sl.Mangas {
+		s += fmt.Sprintf("	- %s\n		Author: %s\n		Views: %s\n\n", mg.Name, mg.Author.Name, mg.Views)
+		sl.NameToIDMap[mg.Name] = mg.ID
 	}
+
+	// for i := 0; i < 10; i++ {
+	// 	s += fmt.Sprintf("	- %s\n		Author: %s\n\n", "nice", "not nice")
+	// }
 
 	return s
 }

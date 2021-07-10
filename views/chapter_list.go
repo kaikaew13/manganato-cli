@@ -25,7 +25,8 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView.FgColor = gocui.ColorWhite
 
 	cl := ChapterList{
-		View: clView,
+		View:        clView,
+		NameToIDMap: make(map[string]string),
 	}
 	return &cl, err
 }
