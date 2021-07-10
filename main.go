@@ -7,6 +7,13 @@ import (
 	"github.com/kaikaew13/manganato-cli/views"
 )
 
+var viewNames = []string{
+	views.SearchBarName,
+	views.SearchListName,
+	views.MangaDetailsName,
+	views.ChapterListName,
+}
+
 func main() {
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
