@@ -14,8 +14,6 @@ func edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 		findNextLine(v)
 	case key == gocui.KeyArrowUp:
 		findPrevLine(v)
-		// case key == gocui.KeyEnter:
-		// 	pickLine(v)
 	}
 }
 
@@ -56,18 +54,3 @@ func findPrevLine(v *gocui.View) {
 		tmpy--
 	}
 }
-
-// might be better if control key enter from keybindings() in root dir
-
-// func pickLine(v *gocui.View) {
-// 	_, y := v.Cursor()
-
-// 	s, _ := v.Line(y)
-// 	s = strings.TrimSpace(s)
-
-// 	if len(s) > 2 && s[:3] == "[x]" {
-// 		name := s[4:]
-
-// 		log.Panicln(name)
-// 	}
-// }

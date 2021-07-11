@@ -26,7 +26,7 @@ func main() {
 
 	g.Highlight = true
 	g.BgColor = gocui.ColorBlack
-	g.FgColor = gocui.ColorWhite
+	g.FgColor = gocui.ColorYellow
 	g.Cursor = true
 
 	g.SetManagerFunc(layout)
