@@ -26,5 +26,9 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
+	if err := g.SetKeybinding(views.SearchListName, gocui.KeyEnter, gocui.ModNone, pickManga); err != nil {
+		return err
+	}
+
 	return nil
 }

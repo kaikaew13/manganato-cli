@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/jroimartin/gocui"
-	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -24,16 +23,10 @@ func switchView(g *gocui.Gui, v *gocui.View) error {
 func enterCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 
-	mdView, err := g.View(views.MangaDetailsName)
-	if err != nil {
-		return err
-	}
-	fmt.Fprint(mdView, s)
-
 	screen.sb.SaveCommand(s)
 
 	x, y := v.Origin()
-	if err = v.SetCursor(x, y); err != nil {
+	if err := v.SetCursor(x, y); err != nil {
 		return err
 	}
 
@@ -58,6 +51,30 @@ func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 
 	v.Clear()
 	v.Write([]byte(s))
+
+	return nil
+}
+
+func pickManga(g *gocui.Gui, v *gocui.View) error {
+	_, y := v.Cursor()
+
+	s, _ := v.Line(y)
+	s = strings.TrimSpace(s)
+
+	if len(s) > 2 && s[:3] == "[x]" {
+		mgName := s[4:]
+		mgId := screen.sl.NameToIDMap[mgName]
+
+		mg, err := screen.searcher.PickManga(mgId)
+		if err != nil {
+			return err
+		}
+
+		screen.md.Manga = *mg
+		s = screen.md.FormatManga()
+
+		screen.md.View.Write([]byte(s))
+	}
 
 	return nil
 }
