@@ -14,7 +14,10 @@ type ChapterList struct {
 }
 
 func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
-	clView, err := g.SetView(ChapterListName, maxX/2, (maxY-SearchBarHeight-1)/2, maxX-1, maxY-SearchBarHeight-2)
+	cl := ChapterList{}
+	x0, y0, x1, y1 := cl.GetCoords(maxX, maxY)
+
+	clView, err := g.SetView(ChapterListName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
@@ -24,10 +27,13 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
 
-	cl := ChapterList{
-		View:        clView,
-		Chapters:    make([]nato.Chapter, 0),
-		NameToIDMap: make(map[string]string),
-	}
+	cl.View = clView
+	cl.Chapters = make([]nato.Chapter, 0)
+	cl.NameToIDMap = make(map[string]string)
+
 	return &cl, err
+}
+
+func (cl *ChapterList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
+	return maxX / 2, (maxY - SearchBarHeight - 1) / 2, maxX - 1, maxY - SearchBarHeight - 2
 }

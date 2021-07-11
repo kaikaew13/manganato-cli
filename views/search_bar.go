@@ -15,7 +15,10 @@ type SearchBar struct {
 }
 
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
-	sbView, err := g.SetView(SearchBarName, 1, maxY-SearchBarHeight-1, maxX-1, maxY-1)
+	sb := SearchBar{}
+	x0, y0, x1, y1 := sb.GetCoords(maxX, maxY)
+
+	sbView, err := g.SetView(SearchBarName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
@@ -28,11 +31,13 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 
 	cmds := make([]string, 0)
 
-	sb := SearchBar{
-		View:     sbView,
-		Commands: &cmds,
-	}
+	sb.View = sbView
+	sb.Commands = &cmds
 	return &sb, err
+}
+
+func (sb *SearchBar) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
+	return 1, maxY - SearchBarHeight - 1, maxX - 1, maxY - 1
 }
 
 func (sb *SearchBar) SaveCommand(cmd string) {

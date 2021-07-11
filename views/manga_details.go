@@ -14,7 +14,10 @@ type MangaDetails struct {
 }
 
 func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
-	mdView, err := g.SetView(MangaDetailsName, maxX/2, 1, maxX-1, ((maxY-SearchBarHeight-1)/2)-1)
+	md := MangaDetails{}
+	x0, y0, x1, y1 := md.GetCoords(maxX, maxY)
+
+	mdView, err := g.SetView(MangaDetailsName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
@@ -24,10 +27,13 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	mdView.BgColor = gocui.ColorBlack
 	mdView.FgColor = gocui.ColorWhite
 
-	md := MangaDetails{
-		View:        mdView,
-		Manga:       nato.Manga{},
-		NameToIDMap: make(map[string]string),
-	}
+	md.View = mdView
+	md.Manga = nato.Manga{}
+	md.NameToIDMap = make(map[string]string)
+
 	return &md, err
+}
+
+func (md *MangaDetails) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
+	return maxX / 2, 1, maxX - 1, ((maxY - SearchBarHeight - 1) / 2) - 1
 }

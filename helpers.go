@@ -10,38 +10,25 @@ import (
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 
-	var err error
-
-	if screen.sb, err = views.GetSearchBar(maxX, maxY, g); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-		if _, err = g.SetCurrentView(views.SearchBarName); err != nil {
-			return err
-		}
-	}
-
-	if screen.sl, err = views.GetSearchList(maxX, maxY, g); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-		if err = getInitialScreen(); err != nil {
-			return err
-		}
-	}
-
-	if screen.md, err = views.GetMangaDetails(maxX, maxY, g); err != nil && err != gocui.ErrUnknownView {
+	x0, y0, x1, y1 := screen.sb.GetCoords(maxX, maxY)
+	if _, err := g.SetView(views.SearchBarName, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
-	if screen.cl, err = views.GetChapterList(maxX, maxY, g); err != nil && err != gocui.ErrUnknownView {
+	x0, y0, x1, y1 = screen.sl.GetCoords(maxX, maxY)
+	if _, err := g.SetView(views.SearchListName, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
-	// screen.sb = sb
-	// screen.sl = sl
-	// screen.md = md
-	// screen.cl = cl
+	x0, y0, x1, y1 = screen.md.GetCoords(maxX, maxY)
+	if _, err := g.SetView(views.MangaDetailsName, x0, y0, x1, y1); err != nil {
+		return err
+	}
+
+	x0, y0, x1, y1 = screen.cl.GetCoords(maxX, maxY)
+	if _, err := g.SetView(views.ChapterListName, x0, y0, x1, y1); err != nil {
+		return err
+	}
 
 	return nil
 }

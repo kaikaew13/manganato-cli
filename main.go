@@ -29,7 +29,7 @@ func main() {
 	g.FgColor = gocui.ColorWhite
 	g.Cursor = true
 
-	// g.SetManagerFunc(layout)
+	g.SetManagerFunc(layout)
 
 	if err := keybindings(g); err != nil {
 		log.Panicln(err)
