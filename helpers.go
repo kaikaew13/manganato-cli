@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/jroimartin/gocui"
 	"github.com/kaikaew13/manganato-cli/views"
@@ -26,7 +25,9 @@ func layout(g *gocui.Gui) error {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		getInitialScreen()
+		if err = getInitialScreen(); err != nil {
+			return err
+		}
 	}
 
 	screen.md, err = views.GetMangaDetails(maxX, maxY, g)
@@ -47,11 +48,12 @@ func layout(g *gocui.Gui) error {
 	return nil
 }
 
-func getInitialScreen() {
+func getInitialScreen() error {
 	mgs, err := screen.searcher.SearchLatestUpdatedManga()
 	if err != nil {
-		log.Panicln(err)
+		return err
 	}
 	screen.sl.Mangas = *mgs
 	fmt.Fprint(screen.sl.View, screen.sl.FormatMangas())
+	return nil
 }
