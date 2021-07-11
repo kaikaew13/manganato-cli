@@ -40,29 +40,51 @@ func (sb *SearchBar) SaveCommand(cmd string) {
 		return
 	}
 
-	*sb.Commands = append(*sb.Commands, cmd[:len(cmd)-1])
+	*sb.Commands = append(*sb.Commands, removeNewline(cmd))
 }
 
 func (sb *SearchBar) GetPrevCommand(cmd string) string {
-	if len(*sb.Commands) == 0 {
+	cmds := *sb.Commands
+
+	if len(cmds) == 0 {
 		return ""
 	}
-
-	cmds := *sb.Commands
 
 	if cmd == "" {
 		return cmds[len(cmds)-1]
 	}
 
 	for i, v := range cmds {
-		if v == cmd[:len(cmd)-1] {
-			index := (i - 1) % len(cmds)
-			if index < 0 {
-				index += len(cmds)
+		if v == removeNewline(cmd) {
+			if i-1 < 0 {
+				return ""
 			}
-			return cmds[index]
+			return cmds[i-1]
 		}
 	}
 
 	return cmds[len(cmds)-1]
+}
+
+func (sb *SearchBar) GetNextCommand(cmd string) string {
+	cmds := *sb.Commands
+
+	if len(cmds) == 0 || cmd == "" {
+		return ""
+	}
+
+	for i, v := range cmds {
+		if v == removeNewline(cmd) {
+			if i+1 == len(cmds) {
+				return ""
+			}
+			return cmds[i+1]
+		}
+	}
+
+	return ""
+}
+
+func removeNewline(s string) string {
+	return s[:len(s)-1]
 }

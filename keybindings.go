@@ -22,5 +22,9 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
+	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyArrowDown, gocui.ModNone, getNextCommand); err != nil {
+		return err
+	}
+
 	return nil
 }
