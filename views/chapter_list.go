@@ -1,6 +1,8 @@
 package views
 
 import (
+	"fmt"
+
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
 )
@@ -38,4 +40,14 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 
 func (cl *ChapterList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 	return maxX / 2, (maxY - SearchBarHeight - 1) / 2, maxX - 1, maxY - SearchBarHeight - 2
+}
+
+func (cl *ChapterList) FormatChapters() string {
+	s := "\n		CHAPTER NAME					VIEWS			UPLOADED\n\n"
+
+	for _, chapter := range cl.Chapters {
+		s += fmt.Sprintf("		%s				%s			%s\n\n", chapter.ChapterName, chapter.Views, chapter.Uploaded)
+	}
+
+	return s
 }

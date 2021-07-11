@@ -72,8 +72,11 @@ func pickManga(g *gocui.Gui, v *gocui.View) error {
 
 		screen.md.Manga = *mg
 		s = screen.md.FormatManga()
-
 		screen.md.View.Write([]byte(s))
+
+		screen.cl.Chapters = mg.Chapters
+		s = screen.cl.FormatChapters()
+		screen.cl.View.Write([]byte(s))
 	}
 
 	return nil
