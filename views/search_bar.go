@@ -1,6 +1,8 @@
 package views
 
-import "github.com/jroimartin/gocui"
+import (
+	"github.com/jroimartin/gocui"
+)
 
 const (
 	SearchBarHeight int    = 2
@@ -8,8 +10,8 @@ const (
 )
 
 type SearchBar struct {
-	View    *gocui.View
-	Command []string
+	View     *gocui.View
+	Commands *[]string
 }
 
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
@@ -24,9 +26,19 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sbView.FgColor = gocui.ColorWhite
 	sbView.Editable = true
 
+	cmds := make([]string, 0)
+
 	sb := SearchBar{
-		View:    sbView,
-		Command: make([]string, 0),
+		View:     sbView,
+		Commands: &cmds,
 	}
 	return &sb, err
+}
+
+func (sb *SearchBar) SaveCommand(cmd string) {
+	if cmd == "" {
+		return
+	}
+
+	*sb.Commands = append(*sb.Commands, cmd[:len(cmd)-1])
 }
