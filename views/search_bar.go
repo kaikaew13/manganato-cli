@@ -42,3 +42,27 @@ func (sb *SearchBar) SaveCommand(cmd string) {
 
 	*sb.Commands = append(*sb.Commands, cmd[:len(cmd)-1])
 }
+
+func (sb *SearchBar) GetPrevCommand(cmd string) string {
+	if len(*sb.Commands) == 0 {
+		return ""
+	}
+
+	cmds := *sb.Commands
+
+	if cmd == "" {
+		return cmds[len(cmds)-1]
+	}
+
+	for i, v := range cmds {
+		if v == cmd[:len(cmd)-1] {
+			index := (i - 1) % len(cmds)
+			if index < 0 {
+				index += len(cmds)
+			}
+			return cmds[index]
+		}
+	}
+
+	return cmds[len(cmds)-1]
+}

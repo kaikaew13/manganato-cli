@@ -18,5 +18,9 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
+	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyArrowUp, gocui.ModNone, getPrevCommand); err != nil {
+		return err
+	}
+
 	return nil
 }
