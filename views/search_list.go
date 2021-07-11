@@ -30,8 +30,8 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	slView.Highlight = true
 	slView.BgColor = gocui.ColorBlack
 	slView.FgColor = gocui.ColorWhite
-	slView.Editor = selectingEditor
 	slView.Editable = true
+	slView.Editor = selectingEditor
 	slView.Wrap = true
 
 	sl.View = slView
@@ -58,4 +58,8 @@ func (sl *SearchList) FormatMangas() string {
 	}
 
 	return s
+}
+
+func (sl *SearchList) GetBuf() string {
+	return sl.View.Buffer()
 }

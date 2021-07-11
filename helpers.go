@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/jroimartin/gocui"
 	"github.com/kaikaew13/manganato-cli/views"
 )
@@ -39,6 +37,8 @@ func getInitialScreen() error {
 		return err
 	}
 	screen.sl.Mangas = *mgs
-	fmt.Fprint(screen.sl.View, screen.sl.FormatMangas())
+
+	screen.sl.View.Write([]byte(screen.sl.FormatMangas()))
+
 	return nil
 }
