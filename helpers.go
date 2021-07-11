@@ -12,16 +12,16 @@ func layout(g *gocui.Gui) error {
 
 	var err error
 
-	screen.sb, err = views.GetSearchBar(maxX, maxY, g)
-	if err != nil {
+	if screen.sb, err = views.GetSearchBar(maxX, maxY, g); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
-		g.SetCurrentView(views.SearchBarName)
+		if _, err = g.SetCurrentView(views.SearchBarName); err != nil {
+			return err
+		}
 	}
 
-	screen.sl, err = views.GetSearchList(maxX, maxY, g)
-	if err != nil {
+	if screen.sl, err = views.GetSearchList(maxX, maxY, g); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -30,13 +30,11 @@ func layout(g *gocui.Gui) error {
 		}
 	}
 
-	screen.md, err = views.GetMangaDetails(maxX, maxY, g)
-	if err != nil && err != gocui.ErrUnknownView {
+	if screen.md, err = views.GetMangaDetails(maxX, maxY, g); err != nil && err != gocui.ErrUnknownView {
 		return err
 	}
 
-	screen.cl, err = views.GetChapterList(maxX, maxY, g)
-	if err != nil && err != gocui.ErrUnknownView {
+	if screen.cl, err = views.GetChapterList(maxX, maxY, g); err != nil && err != gocui.ErrUnknownView {
 		return err
 	}
 
