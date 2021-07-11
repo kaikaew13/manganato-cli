@@ -40,6 +40,13 @@ func (sb *SearchBar) SaveCommand(cmd string) {
 		return
 	}
 
+	for i, v := range *sb.Commands {
+		if v == removeNewline(cmd) {
+			(*sb.Commands) = append((*sb.Commands)[:i], (*sb.Commands)[i+1:]...)
+			break
+		}
+	}
+
 	*sb.Commands = append(*sb.Commands, removeNewline(cmd))
 }
 
