@@ -9,7 +9,7 @@ const (
 
 type SearchBar struct {
 	View    *gocui.View
-	Command string
+	Command []string
 }
 
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
@@ -25,7 +25,8 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sbView.Editable = true
 
 	sb := SearchBar{
-		View: sbView,
+		View:    sbView,
+		Command: make([]string, 0),
 	}
 	return &sb, err
 }

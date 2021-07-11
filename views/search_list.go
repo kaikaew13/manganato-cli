@@ -32,6 +32,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 
 	sl := SearchList{
 		View:        slView,
+		Mangas:      make([]nato.Manga, 0),
 		NameToIDMap: make(map[string]string),
 	}
 	return &sl, err

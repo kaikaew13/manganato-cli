@@ -28,7 +28,7 @@ func enterCommand(g *gocui.Gui, v *gocui.View) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintln(mdView, s)
+	fmt.Fprint(mdView, s)
 
 	x, y := v.Origin()
 	if err = v.SetCursor(x, y); err != nil {

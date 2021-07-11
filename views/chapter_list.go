@@ -26,6 +26,7 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 
 	cl := ChapterList{
 		View:        clView,
+		Chapters:    make([]nato.Chapter, 0),
 		NameToIDMap: make(map[string]string),
 	}
 	return &cl, err

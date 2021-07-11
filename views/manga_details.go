@@ -26,6 +26,7 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 
 	md := MangaDetails{
 		View:        mdView,
+		Manga:       nato.Manga{},
 		NameToIDMap: make(map[string]string),
 	}
 	return &md, err
