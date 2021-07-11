@@ -1,6 +1,7 @@
 package views
 
 import (
+	"log"
 	"strings"
 
 	"github.com/jroimartin/gocui"
@@ -13,7 +14,9 @@ func edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 	case key == gocui.KeyArrowDown:
 		findNextLine(v)
 	case key == gocui.KeyArrowUp:
-		v.MoveCursor(0, -1, false)
+		findPrevLine(v)
+	case key == gocui.KeyEnter:
+		pickLine(v)
 	}
 }
 
@@ -28,11 +31,40 @@ func findNextLine(v *gocui.View) {
 		}
 
 		s = strings.TrimSpace(s)
-		if len(s) > 0 && s[0] == '-' {
+		if len(s) > 2 && s[:3] == "[x]" {
 			v.MoveCursor(0, tmpy-y, false)
 			return
 		}
 		tmpy++
 	}
+}
 
+func findPrevLine(v *gocui.View) {
+	_, y := v.Cursor()
+	tmpy := y - 1
+
+	for {
+		s, err := v.Line(tmpy)
+		if err != nil {
+			break
+		}
+
+		s = strings.TrimSpace(s)
+		if len(s) > 2 && s[:3] == "[x]" {
+			v.MoveCursor(0, tmpy-y, false)
+			return
+		}
+		tmpy--
+	}
+}
+
+func pickLine(v *gocui.View) {
+	_, y := v.Cursor()
+
+	s, _ := v.Line(y)
+	s = strings.TrimSpace(s)
+
+	if len(s) > 2 && s[:3] == "[x]" {
+		log.Panicln("nice")
+	}
 }

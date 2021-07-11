@@ -46,13 +46,13 @@ func (sl *SearchList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 }
 
 func (sl *SearchList) FormatMangas() string {
-	s := "\n\n"
+	s := "			press ENTER on the manga title([x]) to start reading\n\n"
 
 	for _, mg := range sl.Mangas {
 		if mg.Views != "" {
-			s += fmt.Sprintf("	- %s\n			Author: %s\n			Views: %s\n\n", mg.Name, mg.Author.Name, mg.Views)
+			s += fmt.Sprintf("	[x] %s\n			Author: %s\n			Views: %s\n\n", mg.Name, mg.Author.Name, mg.Views)
 		} else {
-			s += fmt.Sprintf("	- %s\n			Author: %s\n\n", mg.Name, mg.Author.Name)
+			s += fmt.Sprintf("	[x] %s\n			Author: %s\n\n", mg.Name, mg.Author.Name)
 		}
 		sl.NameToIDMap[mg.Name] = mg.ID
 	}
