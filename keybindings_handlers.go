@@ -11,7 +11,28 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 func switchView(g *gocui.Gui, v *gocui.View) error {
 	for i, name := range viewNames {
 		if name == v.Name() {
-			g.SetCurrentView(viewNames[(i+1)%len(viewNames)])
+			if i == len(viewNames)-1 {
+				g.SetCurrentView(viewNames[0])
+				break
+			}
+
+			g.SetCurrentView(viewNames[i+1])
+			break
+		}
+	}
+
+	return nil
+}
+
+func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
+	for i, name := range viewNames {
+		if name == v.Name() {
+			if i == 0 {
+				g.SetCurrentView(viewNames[len(viewNames)-1])
+				break
+			}
+
+			g.SetCurrentView(viewNames[i-1])
 			break
 		}
 	}

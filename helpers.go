@@ -20,6 +20,13 @@ const (
 	// searchByAuthorCommand  = searchCommand + "-author"
 )
 
+var viewNames = []string{
+	views.SearchBarName,
+	views.SearchListName,
+	views.MangaDetailsName,
+	views.ChapterListName,
+}
+
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 
@@ -178,14 +185,14 @@ func setupDownloadPath(pgs []nato.Page, chapterName string) error {
 			err = downloadPage(fp, url)
 		}(pg.ID, pg.ImageURL)
 
-		// fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", pg.ID))
-
-		// err = downloadPage(fp, pg.ImageURL)
+		if err != nil {
+			return err
+		}
 	}
 
 	wg.Wait()
 
-	return err
+	return nil
 }
 
 func getDirPath(homedir, chapterName string) (dirpath string, err error) {

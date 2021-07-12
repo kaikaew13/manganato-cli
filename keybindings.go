@@ -14,6 +14,10 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
+	if err := g.SetKeybinding("", '`', gocui.ModNone, reverseSwitchView); err != nil {
+		return err
+	}
+
 	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyEnter, gocui.ModNone, enterCommand); err != nil {
 		return err
 	}
