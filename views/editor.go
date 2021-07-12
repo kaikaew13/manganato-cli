@@ -8,19 +8,37 @@ import (
 
 const Selector string = "[x]"
 
-var selectingEditor gocui.Editor = gocui.EditorFunc(edit)
+var readOnlyEditor gocui.Editor = gocui.EditorFunc(edit)
 
 func edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 	switch {
-	case key == gocui.KeyArrowDown:
+	case key == gocui.KeyArrowDown, ch == 's':
 		findNextLine(v)
-	case key == gocui.KeyArrowUp:
+	case key == gocui.KeyArrowUp, ch == 'w':
 		findPrevLine(v)
+	case key == gocui.KeyArrowLeft, ch == 'a':
+		moveHorizontally(v, -1)
+	case key == gocui.KeyArrowRight, ch == 'd':
+		moveHorizontally(v, 1)
 	}
+}
+
+func moveHorizontally(v *gocui.View, dir int) {
+	if v.Name() != MangaDetailsName {
+		return
+	}
+
+	v.MoveCursor(dir, 0, false)
 }
 
 func findNextLine(v *gocui.View) {
 	_, y := v.Cursor()
+
+	if v.Name() == MangaDetailsName {
+		v.MoveCursor(0, 1, false)
+		return
+	}
+
 	tmpy := y + 1
 
 	for {
@@ -40,6 +58,12 @@ func findNextLine(v *gocui.View) {
 
 func findPrevLine(v *gocui.View) {
 	_, y := v.Cursor()
+
+	if v.Name() == MangaDetailsName {
+		v.MoveCursor(0, -1, false)
+		return
+	}
+
 	tmpy := y - 1
 
 	for {

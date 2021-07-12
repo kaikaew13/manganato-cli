@@ -25,11 +25,13 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	}
 
 	mdView.Title = MangaDetailsName
-	mdView.SelFgColor = gocui.ColorGreen
+	mdView.SelFgColor = gocui.ColorBlack
+	mdView.SelBgColor = gocui.ColorGreen
+	mdView.Highlight = true
 	mdView.BgColor = gocui.ColorBlack
 	mdView.FgColor = gocui.ColorWhite
 	mdView.Editable = true
-	mdView.Editor = selectingEditor
+	mdView.Editor = readOnlyEditor
 	mdView.Wrap = true
 
 	md.View = mdView
@@ -52,11 +54,11 @@ func (md *MangaDetails) FormatManga() string {
 
 	var genres string
 	for _, v := range md.Manga.Genres {
-		genres += v.GenreName + "\t"
+		genres += Selector + v.GenreName + "\t"
 	}
 
 	s += fmt.Sprintf("		GENRES: %s\n\n", genres)
-	s += fmt.Sprintf("		AUTHOR: %s\n\n", md.Manga.Author.Name)
+	s += fmt.Sprintf("		AUTHOR: %s %s\n\n", Selector, md.Manga.Author.Name)
 	s += fmt.Sprintf("		UPDATED: %s\n\n", md.Manga.Updated)
 	s += fmt.Sprintf("		VIEWS: %s\n\n", md.Manga.Views)
 	s += fmt.Sprintf("		RATING: %s\n\n", md.Manga.Rating)

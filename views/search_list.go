@@ -31,7 +31,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	slView.BgColor = gocui.ColorBlack
 	slView.FgColor = gocui.ColorWhite
 	slView.Editable = true
-	slView.Editor = selectingEditor
+	slView.Editor = readOnlyEditor
 	slView.Wrap = true
 
 	sl.View = slView

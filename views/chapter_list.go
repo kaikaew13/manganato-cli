@@ -33,7 +33,7 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
 	clView.Editable = true
-	clView.Editor = selectingEditor
+	clView.Editor = readOnlyEditor
 
 	cl.View = clView
 	cl.Chapters = make([]nato.Chapter, 0)
