@@ -29,10 +29,11 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView.Title = ChapterListName
 	clView.SelFgColor = gocui.ColorBlack
 	clView.SelBgColor = gocui.ColorGreen
-	clView.Highlight = true
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
+	clView.Highlight = true
 	clView.Editable = true
+	clView.Wrap = true
 	clView.Editor = readOnlyEditor
 
 	cl.View = clView

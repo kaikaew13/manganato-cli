@@ -173,9 +173,9 @@ func setupDownloadPath(pgs []nato.Page) error {
 	return nil
 }
 
-func getDirPath(homedir string) (string, error) {
-	dirpath := filepath.Join(homedir, "Desktop", "manganato-cli")
-	err := os.Mkdir(dirpath, 0755)
+func getDirPath(homedir string) (dirpath string, err error) {
+	dirpath = filepath.Join(homedir, "Desktop", "manganato-cli")
+	err = os.Mkdir(dirpath, 0755)
 	if err != nil {
 		return "", err
 	}

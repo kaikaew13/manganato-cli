@@ -15,6 +15,7 @@ func switchView(g *gocui.Gui, v *gocui.View) error {
 			break
 		}
 	}
+
 	return nil
 }
 

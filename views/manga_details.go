@@ -27,12 +27,12 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	mdView.Title = MangaDetailsName
 	mdView.SelFgColor = gocui.ColorBlack
 	mdView.SelBgColor = gocui.ColorGreen
-	mdView.Highlight = true
 	mdView.BgColor = gocui.ColorBlack
 	mdView.FgColor = gocui.ColorWhite
+	mdView.Highlight = true
 	mdView.Editable = true
-	mdView.Editor = readOnlyEditor
 	mdView.Wrap = true
+	mdView.Editor = readOnlyEditor
 
 	md.View = mdView
 	md.Manga = nato.Manga{}

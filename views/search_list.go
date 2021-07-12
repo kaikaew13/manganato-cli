@@ -27,12 +27,12 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	slView.Title = SearchListName
 	slView.SelFgColor = gocui.ColorBlack
 	slView.SelBgColor = gocui.ColorGreen
-	slView.Highlight = true
 	slView.BgColor = gocui.ColorBlack
 	slView.FgColor = gocui.ColorWhite
+	slView.Highlight = true
 	slView.Editable = true
-	slView.Editor = readOnlyEditor
 	slView.Wrap = true
+	slView.Editor = readOnlyEditor
 
 	sl.View = slView
 	sl.Mangas = make([]nato.Manga, 0)
