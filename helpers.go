@@ -1,7 +1,12 @@
 package main
 
 import (
-	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"os/user"
+	"path/filepath"
 	"strings"
 
 	"github.com/jroimartin/gocui"
@@ -53,7 +58,7 @@ func getInitialScreen() error {
 }
 
 func getMangaScreen(s string) error {
-	if len(s) >= len(views.Selector) && strings.HasPrefix(s, views.Selector) {
+	if strings.HasPrefix(s, views.Selector) {
 		mgName, mgId := getMangaNameAndID(s, len(views.Selector))
 
 		mg, err := screen.searcher.PickManga(mgId)
@@ -72,17 +77,19 @@ func getMangaScreen(s string) error {
 		s = screen.cl.FormatChapters()
 		screen.cl.View.Clear()
 		screen.cl.View.Write([]byte(s))
-
-		return nil
 	}
 
-	return errors.New("not a selectable line")
+	return nil
 }
 
 func getMangaNameAndID(s string, prefLen int) (mgName, mgId string) {
-	mgName = s[prefLen+1:]
+	mgName = removePref(s, prefLen)
 	mgId = screen.sl.NameToIDMap[mgName]
 	return
+}
+
+func removePref(s string, prefLen int) string {
+	return s[prefLen+1:]
 }
 
 func validateCommand(s string) (valid bool, cmd, args string) {
@@ -117,4 +124,86 @@ func runCommand(cmd, args string) error {
 	}
 
 	return nil
+}
+
+func trimLine(v *gocui.View) string {
+	_, y := v.Cursor()
+
+	s, _ := v.Line(y)
+
+	return strings.TrimSpace(s)
+}
+
+func downloadChapter(s string) error {
+	if strings.HasPrefix(s, views.Selector) {
+		chapterName := removePref(s, len(views.Selector))
+		chapterName = strings.Split(chapterName, "\t")[0]
+
+		pgs, err := screen.searcher.ReadMangaChapter(screen.cl.MangaID, screen.cl.NameToIDMap[chapterName])
+		if err != nil {
+			return err
+		}
+
+		setupDownloadPath(*pgs)
+	}
+
+	return nil
+}
+
+func setupDownloadPath(pgs []nato.Page) error {
+	user, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	dirpath, err := getDirPath(user.HomeDir)
+	if err != nil {
+		return err
+	}
+
+	for _, pg := range pgs {
+		fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", pg.ID))
+
+		err = downloadPage(fp, pg.ImageURL)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func getDirPath(homedir string) (string, error) {
+	dirpath := filepath.Join(homedir, "Desktop", "manganato-cli")
+	err := os.Mkdir(dirpath, 0755)
+	if err != nil {
+		return "", err
+	}
+
+	return dirpath, nil
+}
+
+func downloadPage(fp, url string) error {
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Add("referer", "https://readmanganato.com/")
+
+	client := &http.Client{}
+
+	res, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	f, err := os.Create(fp)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = io.Copy(f, res.Body)
+	return err
 }

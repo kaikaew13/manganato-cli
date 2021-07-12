@@ -54,11 +54,11 @@ func (md *MangaDetails) FormatManga() string {
 
 	var genres string
 	for _, v := range md.Manga.Genres {
-		genres += Selector + v.GenreName + "\t"
+		genres += v.GenreName + "\t"
 	}
 
 	s += fmt.Sprintf("		GENRES: %s\n\n", genres)
-	s += fmt.Sprintf("		AUTHOR: %s %s\n\n", Selector, md.Manga.Author.Name)
+	s += fmt.Sprintf("		AUTHOR: %s\n\n", md.Manga.Author.Name)
 	s += fmt.Sprintf("		UPDATED: %s\n\n", md.Manga.Updated)
 	s += fmt.Sprintf("		VIEWS: %s\n\n", md.Manga.Views)
 	s += fmt.Sprintf("		RATING: %s\n\n", md.Manga.Rating)

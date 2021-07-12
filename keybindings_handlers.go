@@ -1,8 +1,6 @@
 package main
 
 import (
-	"strings"
-
 	"github.com/jroimartin/gocui"
 )
 
@@ -63,12 +61,17 @@ func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 }
 
 func pickManga(g *gocui.Gui, v *gocui.View) error {
-	_, y := v.Cursor()
-
-	s, _ := v.Line(y)
-	s = strings.TrimSpace(s)
+	s := trimLine(v)
 
 	err := getMangaScreen(s)
+
+	return err
+}
+
+func pickChapter(g *gocui.Gui, v *gocui.View) error {
+	s := trimLine(v)
+
+	err := downloadChapter(s)
 
 	return err
 }

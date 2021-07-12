@@ -51,6 +51,7 @@ func (cl *ChapterList) FormatChapters() string {
 
 	for _, chapter := range cl.Chapters {
 		s += fmt.Sprintf("			%s %s				%s			%s\n\n", Selector, chapter.ChapterName, chapter.Views, chapter.Uploaded)
+		cl.NameToIDMap[chapter.ChapterName] = chapter.ID
 	}
 
 	return s
