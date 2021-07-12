@@ -8,6 +8,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
@@ -139,43 +140,59 @@ func downloadChapter(s string) error {
 		chapterName := removePref(s, len(views.Selector))
 		chapterName = strings.Split(chapterName, "\t")[0]
 
-		pgs, err := screen.searcher.ReadMangaChapter(screen.cl.MangaID, screen.cl.NameToIDMap[chapterName])
+		pgs, err := screen.searcher.ReadMangaChapter(
+			screen.cl.MangaID,
+			screen.cl.NameToIDMap[chapterName],
+		)
 		if err != nil {
 			return err
 		}
 
-		setupDownloadPath(*pgs)
+		setupDownloadPath(*pgs, chapterName)
 	}
 
 	return nil
 }
 
-func setupDownloadPath(pgs []nato.Page) error {
+func setupDownloadPath(pgs []nato.Page, chapterName string) error {
 	user, err := user.Current()
 	if err != nil {
 		return err
 	}
 
-	dirpath, err := getDirPath(user.HomeDir)
+	dirpath, err := getDirPath(user.HomeDir, chapterName)
 	if err != nil {
 		return err
 	}
 
+	var wg sync.WaitGroup
+
 	for _, pg := range pgs {
 		fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", pg.ID))
 
-		err = downloadPage(fp, pg.ImageURL)
+		wg.Add(1)
+
+		go func() {
+			err = downloadPage(fp, pg.ImageURL)
+			wg.Done()
+		}()
+
 		if err != nil {
 			return err
 		}
 	}
 
+	wg.Wait()
+
 	return nil
 }
 
-func getDirPath(homedir string) (dirpath string, err error) {
-	dirpath = filepath.Join(homedir, "Desktop", "manganato-cli")
-	err = os.Mkdir(dirpath, 0755)
+func getDirPath(homedir, chapterName string) (dirpath string, err error) {
+	dirpath = filepath.Join(
+		homedir, "Desktop", "manganato-cli", screen.cl.MangaName,
+		screen.cl.NameToIDMap[chapterName],
+	)
+	err = os.MkdirAll(dirpath, 0755)
 	if err != nil {
 		return "", err
 	}
