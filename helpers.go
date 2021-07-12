@@ -166,25 +166,26 @@ func setupDownloadPath(pgs []nato.Page, chapterName string) error {
 	}
 
 	var wg sync.WaitGroup
+	wg.Add(len(pgs))
 
 	for _, pg := range pgs {
-		fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", pg.ID))
 
-		wg.Add(1)
+		go func(id, url string) {
+			defer wg.Done()
 
-		go func() {
-			err = downloadPage(fp, pg.ImageURL)
-			wg.Done()
-		}()
+			fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", id))
 
-		if err != nil {
-			return err
-		}
+			err = downloadPage(fp, url)
+		}(pg.ID, pg.ImageURL)
+
+		// fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", pg.ID))
+
+		// err = downloadPage(fp, pg.ImageURL)
 	}
 
 	wg.Wait()
 
-	return nil
+	return err
 }
 
 func getDirPath(homedir, chapterName string) (dirpath string, err error) {
