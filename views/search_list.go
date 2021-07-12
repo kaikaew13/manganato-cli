@@ -49,11 +49,7 @@ func (sl *SearchList) FormatMangas() string {
 	s := fmt.Sprintf("			press ENTER on the manga title(%s) to start reading\n\n", Selector)
 
 	for _, mg := range sl.Mangas {
-		if mg.Views != "" {
-			s += fmt.Sprintf("	%s %s\n			Author: %s\n			Views: %s\n\n", Selector, mg.Name, mg.Author.Name, mg.Views)
-		} else {
-			s += fmt.Sprintf("	%s %s\n			Author: %s\n\n", Selector, mg.Name, mg.Author.Name)
-		}
+		s += fmt.Sprintf("	%s %s\n			Author: %s\n\n", Selector, mg.Name, mg.Author.Name)
 		sl.NameToIDMap[mg.Name] = mg.ID
 	}
 

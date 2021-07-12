@@ -8,6 +8,11 @@ import (
 	"github.com/kaikaew13/manganato-cli/views"
 )
 
+const (
+	searchCommand string = "search"
+	// searchByAuthorCommand  = searchCommand + "-author"
+)
+
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 
@@ -48,7 +53,7 @@ func getInitialScreen() error {
 
 func getMangaScreen(s string) error {
 	if len(s) >= len(views.Selector) && strings.HasPrefix(s, views.Selector) {
-		mgName, mgId := getMangaNameAndID(s)
+		mgName, mgId := getMangaNameAndID(s, len(views.Selector))
 
 		mg, err := screen.searcher.PickManga(mgId)
 		if err != nil {
@@ -73,8 +78,37 @@ func getMangaScreen(s string) error {
 	return errors.New("not a selectable line")
 }
 
-func getMangaNameAndID(s string) (mgName, mgId string) {
-	mgName = s[4:]
+func getMangaNameAndID(s string, prefLen int) (mgName, mgId string) {
+	mgName = s[prefLen+1:]
 	mgId = screen.sl.NameToIDMap[mgName]
 	return
+}
+
+func validateCommand(s string) (valid bool, cmd, args string) {
+	if strings.HasPrefix(s, searchCommand) {
+		valid = true
+		cmd = searchCommand
+		args = s[len(searchCommand)+1:]
+
+		return
+	}
+
+	return
+}
+
+func runCommand(cmd, args string) error {
+	switch cmd {
+	case searchCommand:
+		mgs, err := screen.searcher.SearchManga(args)
+		if err != nil {
+			return err
+		}
+
+		screen.sl.Mangas = *mgs
+		s := screen.sl.FormatMangas()
+		screen.sl.View.Clear()
+		screen.sl.View.Write([]byte(s))
+	}
+
+	return nil
 }

@@ -23,7 +23,14 @@ func switchView(g *gocui.Gui, v *gocui.View) error {
 func enterCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 
-	screen.sb.SaveCommand(s)
+	valid, cmd, args := validateCommand(s)
+	if valid {
+		screen.sb.SaveCommand(s)
+
+		if err := runCommand(cmd, args); err != nil {
+			return err
+		}
+	}
 
 	x, y := v.Origin()
 	if err := v.SetCursor(x, y); err != nil {
