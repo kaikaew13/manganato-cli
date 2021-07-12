@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/jroimartin/gocui"
-	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -62,25 +61,7 @@ func pickManga(g *gocui.Gui, v *gocui.View) error {
 	s, _ := v.Line(y)
 	s = strings.TrimSpace(s)
 
-	if len(s) > 2 && s[:3] == views.Selector {
-		mgName := s[4:]
-		mgId := screen.sl.NameToIDMap[mgName]
+	err := getMangaScreen(s)
 
-		mg, err := screen.searcher.PickManga(mgId)
-		if err != nil {
-			return err
-		}
-
-		screen.md.Manga = *mg
-		s = screen.md.FormatManga()
-		screen.md.View.Clear()
-		screen.md.View.Write([]byte(s))
-
-		screen.cl.Chapters = mg.Chapters
-		s = screen.cl.FormatChapters()
-		screen.cl.View.Clear()
-		screen.cl.View.Write([]byte(s))
-	}
-
-	return nil
+	return err
 }

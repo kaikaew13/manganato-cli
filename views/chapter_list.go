@@ -11,6 +11,8 @@ const ChapterListName = "ChapterList"
 
 type ChapterList struct {
 	View        *gocui.View
+	MangaName   string
+	MangaID     string
 	Chapters    []nato.Chapter
 	NameToIDMap map[string]string
 }
