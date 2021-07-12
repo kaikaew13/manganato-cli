@@ -25,7 +25,9 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	}
 
 	clView.Title = ChapterListName
-	clView.SelFgColor = gocui.ColorGreen
+	clView.SelFgColor = gocui.ColorBlack
+	clView.SelBgColor = gocui.ColorGreen
+	clView.Highlight = true
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
 	clView.Editable = true
@@ -43,10 +45,10 @@ func (cl *ChapterList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 }
 
 func (cl *ChapterList) FormatChapters() string {
-	s := "\n		CHAPTER NAME					VIEWS			UPLOADED\n\n"
+	s := "\n			CHAPTER NAME					VIEWS			UPLOADED\n\n"
 
 	for _, chapter := range cl.Chapters {
-		s += fmt.Sprintf("		%s				%s			%s\n\n", chapter.ChapterName, chapter.Views, chapter.Uploaded)
+		s += fmt.Sprintf("			%s %s				%s			%s\n\n", Selector, chapter.ChapterName, chapter.Views, chapter.Uploaded)
 	}
 
 	return s

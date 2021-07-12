@@ -6,6 +6,8 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
+const Selector string = "[x]"
+
 var selectingEditor gocui.Editor = gocui.EditorFunc(edit)
 
 func edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
@@ -28,7 +30,7 @@ func findNextLine(v *gocui.View) {
 		}
 
 		s = strings.TrimSpace(s)
-		if len(s) > 2 && s[:3] == "[x]" {
+		if len(s) > 2 && s[:3] == Selector {
 			v.MoveCursor(0, tmpy-y, false)
 			return
 		}
@@ -47,7 +49,7 @@ func findPrevLine(v *gocui.View) {
 		}
 
 		s = strings.TrimSpace(s)
-		if len(s) > 2 && s[:3] == "[x]" {
+		if len(s) > 2 && s[:3] == Selector {
 			v.MoveCursor(0, tmpy-y, false)
 			return
 		}
