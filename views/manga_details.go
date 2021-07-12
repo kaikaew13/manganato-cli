@@ -47,7 +47,6 @@ func (md *MangaDetails) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 
 func (md *MangaDetails) FormatManga() string {
 	s := "\n\n"
-	// log.Panicln(md.Manga)
 
 	s += fmt.Sprintf("		TITLE: %s\n\n", md.Manga.Name)
 	s += fmt.Sprintf("		ALT_NAME: %s\n\n", md.Manga.Alternatives)

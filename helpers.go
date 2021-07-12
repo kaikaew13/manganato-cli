@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/jroimartin/gocui"
+	nato "github.com/kaikaew13/manganato-api"
 	"github.com/kaikaew13/manganato-cli/views"
 )
 
@@ -100,13 +101,18 @@ func runCommand(cmd, args string) error {
 	switch cmd {
 	case searchCommand:
 		mgs, err := screen.searcher.SearchManga(args)
-		if err != nil {
+		if err != nil && err != nato.ErrPageNotFound {
 			return err
+		}
+
+		screen.sl.View.Clear()
+		if err == nato.ErrPageNotFound {
+			screen.sl.View.Write([]byte(nato.ErrPageNotFound.Error()))
+			return nil
 		}
 
 		screen.sl.Mangas = *mgs
 		s := screen.sl.FormatMangas()
-		screen.sl.View.Clear()
 		screen.sl.View.Write([]byte(s))
 	}
 
