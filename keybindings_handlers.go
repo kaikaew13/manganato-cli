@@ -1,6 +1,9 @@
 package main
 
 import (
+	"sync"
+	"time"
+
 	"github.com/jroimartin/gocui"
 )
 
@@ -45,12 +48,17 @@ func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
 }
 
 func enterCommand(g *gocui.Gui, v *gocui.View) error {
-	if err := openLoadingScreen(g); err != nil {
+	if err := openModal(g); err != nil {
 		return err
 	}
 
 	go func() {
+		var val bool
+		var wg sync.WaitGroup
+		wg.Add(1)
+
 		g.Update(func(g *gocui.Gui) error {
+			defer wg.Done()
 			s := v.Buffer()
 
 			x, y := v.Origin()
@@ -62,15 +70,42 @@ func enterCommand(g *gocui.Gui, v *gocui.View) error {
 
 			valid, cmd, args := validateCommand(s)
 			if valid {
+				val = valid
 				screen.sb.SaveCommand(s)
 				if err := runCommand(cmd, args); err != nil {
 					return err
 				}
+			} else {
+				return nil
 			}
 
-			err := closeLoadingScreen(g)
+			err := closeModal(g)
 			return err
 		})
+
+		wg.Wait()
+
+		if !val {
+			wg.Add(1)
+			g.Update(func(g *gocui.Gui) error {
+				defer wg.Done()
+				lv, err := g.View(modalViewName)
+				if err != nil {
+					return err
+				}
+				lv.Clear()
+				lv.Write([]byte("unknown command..."))
+				return nil
+			})
+
+			wg.Wait()
+
+			g.Update(func(g *gocui.Gui) error {
+				time.Sleep(time.Second)
+				err := closeModal(g)
+				return err
+			})
+		}
 	}()
 
 	return nil
@@ -105,7 +140,7 @@ func pickManga(g *gocui.Gui, v *gocui.View) error {
 }
 
 func pickChapter(g *gocui.Gui, v *gocui.View) error {
-	if err := openLoadingScreen(g); err != nil {
+	if err := openModal(g); err != nil {
 		return err
 	}
 
@@ -117,7 +152,7 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 				return nil
 			}
 
-			err := closeLoadingScreen(g)
+			err := closeModal(g)
 			return err
 		})
 	}()

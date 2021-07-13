@@ -16,8 +16,8 @@ import (
 )
 
 const (
-	loadingViewName string = "Loading"
-	searchCommand   string = "search"
+	modalViewName string = "Modal"
+	searchCommand string = "search"
 	// searchByAuthorCommand  = searchCommand + "-author"
 )
 
@@ -248,9 +248,9 @@ func resetCursor(v *gocui.View) {
 	}
 }
 
-func openLoadingScreen(g *gocui.Gui) error {
+func openModal(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if lv, err := g.SetView(loadingViewName, maxX/2-10, maxY/2-2, maxX/2+10, maxY/2+2); err != nil {
+	if lv, err := g.SetView(modalViewName, maxX/2-10, maxY/2-2, maxX/2+10, maxY/2+2); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
@@ -267,8 +267,8 @@ func openLoadingScreen(g *gocui.Gui) error {
 	return nil
 }
 
-func closeLoadingScreen(g *gocui.Gui) error {
-	lv, err := g.View(loadingViewName)
+func closeModal(g *gocui.Gui) error {
+	lv, err := g.View(modalViewName)
 	if err != nil {
 		return err
 	}
