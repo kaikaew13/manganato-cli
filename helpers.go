@@ -107,25 +107,19 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 
 	// has to be checked before searchCommand because has 'search' as
 	// a prefix
-	if strings.HasPrefix(s, searchByAuthorCommand) {
+	switch {
+	case strings.HasPrefix(s, searchByAuthorCommand):
 		valid = true
 		cmd = searchByAuthorCommand
 		args = s[len(searchByAuthorCommand)+1 : len(s)-1]
-		return
-	}
-
-	if strings.HasPrefix(s, searchByGenreCommand) {
+	case strings.HasPrefix(s, searchByGenreCommand):
 		valid = true
 		cmd = searchByGenreCommand
 		args = s[len(searchByGenreCommand)+1 : len(s)-1]
-		return
-	}
-
-	if strings.HasPrefix(s, searchCommand) {
+	case strings.HasPrefix(s, searchCommand):
 		valid = true
 		cmd = searchCommand
 		args = s[len(searchCommand)+1 : len(s)-1]
-		return
 	}
 
 	return
