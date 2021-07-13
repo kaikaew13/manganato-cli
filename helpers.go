@@ -250,14 +250,14 @@ func resetCursor(v *gocui.View) {
 
 func openLoadingScreen(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if lv, err := g.SetView(loadingViewName, maxX/2-10, maxY/2-10, maxX/2+10, maxY/2+10); err != nil {
+	if lv, err := g.SetView(loadingViewName, maxX/2-10, maxY/2-2, maxX/2+10, maxY/2+2); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 
 		lv.BgColor = gocui.ColorBlack
 		lv.FgColor = gocui.ColorWhite
-		lv.Write([]byte("Loading..."))
+		lv.Write([]byte("\n\n					Loading..."))
 
 		g.Cursor = false
 		g.SetViewOnTop(lv.Name())

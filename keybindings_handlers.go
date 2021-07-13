@@ -63,7 +63,6 @@ func enterCommand(g *gocui.Gui, v *gocui.View) error {
 			valid, cmd, args := validateCommand(s)
 			if valid {
 				screen.sb.SaveCommand(s)
-
 				if err := runCommand(cmd, args); err != nil {
 					return err
 				}
@@ -106,9 +105,22 @@ func pickManga(g *gocui.Gui, v *gocui.View) error {
 }
 
 func pickChapter(g *gocui.Gui, v *gocui.View) error {
-	s := trimLine(v)
+	if err := openLoadingScreen(g); err != nil {
+		return err
+	}
 
-	err := downloadChapter(s)
+	go func() {
+		g.Update(func(g *gocui.Gui) error {
+			s := trimLine(v)
 
-	return err
+			if err := downloadChapter(s); err != nil {
+				return nil
+			}
+
+			err := closeLoadingScreen(g)
+			return err
+		})
+	}()
+
+	return nil
 }
