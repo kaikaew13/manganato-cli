@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/jroimartin/gocui"
+	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -9,6 +10,12 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 }
 
 func switchView(g *gocui.Gui, v *gocui.View) error {
+
+	if v.Name() == views.SearchListName {
+		v.SetCursor(screen.sl.OriginX, screen.sl.OriginY)
+		v.SetOrigin(screen.sl.OriginX, screen.sl.OriginY)
+	}
+
 	for i, name := range viewNames {
 		if name == v.Name() {
 			if i == len(viewNames)-1 {

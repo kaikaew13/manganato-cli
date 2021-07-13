@@ -13,6 +13,8 @@ type SearchList struct {
 	View        *gocui.View
 	Mangas      []nato.Manga
 	NameToIDMap map[string]string
+	OriginX     int
+	OriginY     int
 }
 
 func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
@@ -37,6 +39,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	sl.View = slView
 	sl.Mangas = make([]nato.Manga, 0)
 	sl.NameToIDMap = make(map[string]string)
+	sl.OriginX, sl.OriginY = slView.Origin()
 
 	return &sl, err
 }
