@@ -13,6 +13,8 @@ type MangaDetails struct {
 	View        *gocui.View
 	Manga       nato.Manga
 	NameToIDMap map[string]string
+	OriginX     int
+	OriginY     int
 }
 
 func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
@@ -37,6 +39,7 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	md.View = mdView
 	md.Manga = nato.Manga{}
 	md.NameToIDMap = make(map[string]string)
+	md.OriginX, md.OriginY = mdView.Origin()
 
 	return &md, err
 }

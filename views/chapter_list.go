@@ -15,6 +15,8 @@ type ChapterList struct {
 	MangaID     string
 	Chapters    []nato.Chapter
 	NameToIDMap map[string]string
+	OriginX     int
+	OriginY     int
 }
 
 func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
@@ -39,6 +41,7 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	cl.View = clView
 	cl.Chapters = make([]nato.Chapter, 0)
 	cl.NameToIDMap = make(map[string]string)
+	cl.OriginX, cl.OriginY = clView.Origin()
 
 	return &cl, err
 }

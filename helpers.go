@@ -232,3 +232,17 @@ func downloadPage(fp, url string) error {
 	_, err = io.Copy(f, res.Body)
 	return err
 }
+
+func resetCursor(v *gocui.View) {
+	switch v.Name() {
+	case views.SearchListName:
+		v.SetCursor(screen.sl.OriginX, screen.sl.OriginY)
+		v.SetOrigin(screen.sl.OriginX, screen.sl.OriginY)
+	case views.MangaDetailsName:
+		v.SetCursor(screen.md.OriginX, screen.md.OriginY)
+		v.SetOrigin(screen.md.OriginX, screen.md.OriginY)
+	case views.ChapterListName:
+		v.SetCursor(screen.cl.OriginX, screen.cl.OriginY)
+		v.SetOrigin(screen.cl.OriginX, screen.cl.OriginY)
+	}
+}
