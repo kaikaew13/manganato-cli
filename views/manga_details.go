@@ -52,9 +52,9 @@ func (md *MangaDetails) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 func (md *MangaDetails) FormatManga() string {
 	s := "\n\n"
 
-	s += fmt.Sprintf("		TITLE: %s\n\n", md.Manga.Name)
-	s += fmt.Sprintf("		ALT_NAME: %s\n\n", md.Manga.Alternatives)
-	s += fmt.Sprintf("		STATUS: %s\n\n", md.Manga.Status)
+	s += fmt.Sprintf("\t\tTITLE: %s\n\n", md.Manga.Name)
+	s += fmt.Sprintf("\t\tALT_NAME: %s\n\n", md.Manga.Alternatives)
+	s += fmt.Sprintf("\t\tSTATUS: %s\n\n", md.Manga.Status)
 
 	var genres string
 	for _, v := range md.Manga.Genres {
@@ -64,12 +64,12 @@ func (md *MangaDetails) FormatManga() string {
 		md.NameToIDMap[strings.ToUpper(v.GenreName)] = v.ID
 	}
 
-	s += fmt.Sprintf("		GENRES: %s\n\n", genres)
-	s += fmt.Sprintf("		AUTHOR: %s\n\n", md.Manga.Author.Name)
-	s += fmt.Sprintf("		UPDATED: %s\n\n", md.Manga.Updated)
-	s += fmt.Sprintf("		VIEWS: %s\n\n", md.Manga.Views)
-	s += fmt.Sprintf("		RATING: %s\n\n", md.Manga.Rating)
-	s += fmt.Sprintf("		DESCRIPTION: %s\n\n", md.Manga.Description)
+	s += fmt.Sprintf("\t\tGENRES: %s\n\n", genres)
+	s += fmt.Sprintf("\t\tAUTHOR: %s\n\n", md.Manga.Author.Name)
+	s += fmt.Sprintf("\t\tUPDATED: %s\n\n", md.Manga.Updated)
+	s += fmt.Sprintf("\t\tVIEWS: %s\n\n", md.Manga.Views)
+	s += fmt.Sprintf("\t\tRATING: %s\n\n", md.Manga.Rating)
+	s += fmt.Sprintf("\t\tDESCRIPTION: %s\n\n", md.Manga.Description)
 
 	return s
 }

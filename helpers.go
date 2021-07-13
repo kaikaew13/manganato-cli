@@ -17,6 +17,7 @@ import (
 )
 
 const (
+	manganatoURL          string = "https://readmanganato.com/"
 	modalViewName         string = "Modal"
 	searchCommand         string = "search"
 	searchByAuthorCommand        = searchCommand + "-author"
@@ -272,7 +273,7 @@ func downloadPage(fp, url string) error {
 	if err != nil {
 		return err
 	}
-	req.Header.Add("referer", "https://readmanganato.com/")
+	req.Header.Add("referer", manganatoURL)
 
 	client := &http.Client{}
 
@@ -315,7 +316,7 @@ func openModal(g *gocui.Gui) error {
 
 		lv.BgColor = gocui.ColorBlack
 		lv.FgColor = gocui.ColorWhite
-		lv.Write([]byte("\n\n					Loading..."))
+		lv.Write([]byte("\n\n\t\t\t\t\tLoading..."))
 
 		g.Cursor = false
 		g.SetViewOnTop(lv.Name())

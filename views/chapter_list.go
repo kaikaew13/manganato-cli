@@ -51,11 +51,11 @@ func (cl *ChapterList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 }
 
 func (cl *ChapterList) FormatChapters() string {
-	s := "\n			CHAPTER NAME					VIEWS			UPLOADED\n\n"
+	s := "\n\t\t\tCHAPTER NAME\t\t\t\t\tVIEWS\t\t\tUPLOADED\n\n"
 
 	for _, chapter := range cl.Chapters {
 		s += fmt.Sprintf(
-			"			%s %s				%s			%s\n\n",
+			"\t\t\t%s %s\t\t\t\t%s\t\t\t%s\n\n",
 			Selector, chapter.ChapterName, chapter.Views, chapter.Uploaded,
 		)
 		cl.NameToIDMap[chapter.ChapterName] = chapter.ID
