@@ -20,6 +20,7 @@ const (
 	modalViewName         string = "Modal"
 	searchCommand         string = "search"
 	searchByAuthorCommand        = searchCommand + "-author"
+	searchByGenreCommand         = searchCommand + "-genre"
 )
 
 var viewNames = []string{
@@ -109,15 +110,21 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 	if strings.HasPrefix(s, searchByAuthorCommand) {
 		valid = true
 		cmd = searchByAuthorCommand
-		args = s[len(searchByAuthorCommand)+1:]
-		args = strings.TrimSpace(args)
+		args = s[len(searchByAuthorCommand)+1 : len(s)-1]
+		return
+	}
+
+	if strings.HasPrefix(s, searchByGenreCommand) {
+		valid = true
+		cmd = searchByGenreCommand
+		args = s[len(searchByGenreCommand)+1 : len(s)-1]
 		return
 	}
 
 	if strings.HasPrefix(s, searchCommand) {
 		valid = true
 		cmd = searchCommand
-		args = s[len(searchCommand)+1:]
+		args = s[len(searchCommand)+1 : len(s)-1]
 		return
 	}
 
@@ -133,6 +140,8 @@ func runCommand(cmd, args string) error {
 		mgs, err = screen.searcher.SearchManga(args)
 	case searchByAuthorCommand:
 		mgs, err = screen.searcher.PickAuthor(screen.sl.NameToIDMap[args])
+	case searchByGenreCommand:
+		mgs, err = screen.searcher.PickGenre(screen.md.NameToIDMap[args])
 	}
 
 	if err != nil && err != nato.ErrPageNotFound {
@@ -190,7 +199,7 @@ func processCommand(g *gocui.Gui, v *gocui.View) {
 	}
 }
 
-func trimLine(v *gocui.View) string {
+func trimViewLine(v *gocui.View) string {
 	_, y := v.Cursor()
 
 	s, _ := v.Line(y)

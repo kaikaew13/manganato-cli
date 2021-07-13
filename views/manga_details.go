@@ -2,6 +2,7 @@ package views
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
@@ -58,6 +59,9 @@ func (md *MangaDetails) FormatManga() string {
 	var genres string
 	for _, v := range md.Manga.Genres {
 		genres += v.GenreName + "\t"
+		md.NameToIDMap[v.GenreName] = v.ID
+		md.NameToIDMap[strings.ToLower(v.GenreName)] = v.ID
+		md.NameToIDMap[strings.ToUpper(v.GenreName)] = v.ID
 	}
 
 	s += fmt.Sprintf("		GENRES: %s\n\n", genres)

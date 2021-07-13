@@ -75,7 +75,7 @@ func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 }
 
 func pickManga(g *gocui.Gui, v *gocui.View) error {
-	s := trimLine(v)
+	s := trimViewLine(v)
 
 	err := getMangaScreen(s)
 
@@ -89,7 +89,7 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 
 	go func() {
 		g.Update(func(g *gocui.Gui) error {
-			s := trimLine(v)
+			s := trimViewLine(v)
 
 			if err := downloadChapter(s); err != nil {
 				return nil
