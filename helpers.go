@@ -17,9 +17,9 @@ import (
 )
 
 const (
-	modalViewName string = "Modal"
-	searchCommand string = "search"
-	// searchByAuthorCommand  = searchCommand + "-author"
+	modalViewName         string = "Modal"
+	searchCommand         string = "search"
+	searchByAuthorCommand        = searchCommand + "-author"
 )
 
 var viewNames = []string{
@@ -103,11 +103,21 @@ func removePref(s string, prefLen int) string {
 }
 
 func validateCommand(s string) (valid bool, cmd, args string) {
+
+	// has to be checked before searchCommand because has 'search' as
+	// a prefix
+	if strings.HasPrefix(s, searchByAuthorCommand) {
+		valid = true
+		cmd = searchByAuthorCommand
+		args = s[len(searchByAuthorCommand)+1:]
+		args = strings.TrimSpace(args)
+		return
+	}
+
 	if strings.HasPrefix(s, searchCommand) {
 		valid = true
 		cmd = searchCommand
 		args = s[len(searchCommand)+1:]
-
 		return
 	}
 
@@ -115,25 +125,69 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 }
 
 func runCommand(cmd, args string) error {
+	var err error
+	var mgs *[]nato.Manga
+
 	switch cmd {
 	case searchCommand:
-		mgs, err := screen.searcher.SearchManga(args)
-		if err != nil && err != nato.ErrPageNotFound {
+		mgs, err = screen.searcher.SearchManga(args)
+	case searchByAuthorCommand:
+		mgs, err = screen.searcher.PickAuthor(screen.sl.NameToIDMap[args])
+	}
+
+	if err != nil && err != nato.ErrPageNotFound {
+		return err
+	}
+
+	screen.sl.View.Clear()
+	if err == nato.ErrPageNotFound {
+		screen.sl.View.Write([]byte(nato.ErrPageNotFound.Error()))
+		return nil
+	}
+
+	screen.sl.Mangas = *mgs
+	s := screen.sl.FormatMangas()
+	screen.sl.View.Write([]byte(s))
+
+	return nil
+}
+
+func processCommand(g *gocui.Gui, v *gocui.View) {
+	var val bool
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	g.Update(func(g *gocui.Gui) error {
+		defer wg.Done()
+		s := v.Buffer()
+
+		x, y := v.Origin()
+		if err := v.SetCursor(x, y); err != nil {
 			return err
 		}
+		v.Clear()
 
-		screen.sl.View.Clear()
-		if err == nato.ErrPageNotFound {
-			screen.sl.View.Write([]byte(nato.ErrPageNotFound.Error()))
+		valid, cmd, args := validateCommand(s)
+		if valid {
+			val = valid
+			screen.sb.SaveCommand(s)
+			if err := runCommand(cmd, args); err != nil {
+				return err
+			}
+		} else {
 			return nil
 		}
 
-		screen.sl.Mangas = *mgs
-		s := screen.sl.FormatMangas()
-		screen.sl.View.Write([]byte(s))
-	}
+		err := closeModal(g)
+		return err
+	})
 
-	return nil
+	wg.Wait()
+
+	if !val {
+		setModalMessage(g, "unknown command...")
+	}
 }
 
 func trimLine(v *gocui.View) string {
@@ -305,42 +359,4 @@ func setModalMessage(g *gocui.Gui, msg string) {
 		err := closeModal(g)
 		return err
 	})
-}
-
-func processCommand(g *gocui.Gui, v *gocui.View) {
-	var val bool
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-
-	g.Update(func(g *gocui.Gui) error {
-		defer wg.Done()
-		s := v.Buffer()
-
-		x, y := v.Origin()
-		if err := v.SetCursor(x, y); err != nil {
-			return err
-		}
-		v.Clear()
-
-		valid, cmd, args := validateCommand(s)
-		if valid {
-			val = valid
-			screen.sb.SaveCommand(s)
-			if err := runCommand(cmd, args); err != nil {
-				return err
-			}
-		} else {
-			return nil
-		}
-
-		err := closeModal(g)
-		return err
-	})
-
-	wg.Wait()
-
-	if !val {
-		setModalMessage(g, "unknown command...")
-	}
 }

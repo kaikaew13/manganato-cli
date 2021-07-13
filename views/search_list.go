@@ -2,6 +2,7 @@ package views
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
@@ -54,6 +55,9 @@ func (sl *SearchList) FormatMangas() string {
 	for _, mg := range sl.Mangas {
 		s += fmt.Sprintf("	%s %s\n			Author: %s\n\n", Selector, mg.Name, mg.Author.Name)
 		sl.NameToIDMap[mg.Name] = mg.ID
+		sl.NameToIDMap[mg.Author.Name] = mg.Author.ID
+		sl.NameToIDMap[strings.ToLower(mg.Author.Name)] = mg.Author.ID
+		sl.NameToIDMap[strings.ToUpper(mg.Author.Name)] = mg.Author.ID
 	}
 
 	return s
