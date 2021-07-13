@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
@@ -278,4 +279,68 @@ func closeModal(g *gocui.Gui) error {
 	g.SetCurrentView(views.SearchBarName)
 	g.Cursor = true
 	return nil
+}
+
+// sets a modal message to msg then close the modal
+// after one second
+func setModalMessage(g *gocui.Gui, msg string) {
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	g.Update(func(g *gocui.Gui) error {
+		defer wg.Done()
+		lv, err := g.View(modalViewName)
+		if err != nil {
+			return err
+		}
+		lv.Clear()
+		lv.Write([]byte(msg))
+		return nil
+	})
+
+	wg.Wait()
+
+	g.Update(func(g *gocui.Gui) error {
+		time.Sleep(time.Second)
+		err := closeModal(g)
+		return err
+	})
+}
+
+func processCommand(g *gocui.Gui, v *gocui.View) {
+	var val bool
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	g.Update(func(g *gocui.Gui) error {
+		defer wg.Done()
+		s := v.Buffer()
+
+		x, y := v.Origin()
+		if err := v.SetCursor(x, y); err != nil {
+			return err
+		}
+		v.Clear()
+
+		valid, cmd, args := validateCommand(s)
+		if valid {
+			val = valid
+			screen.sb.SaveCommand(s)
+			if err := runCommand(cmd, args); err != nil {
+				return err
+			}
+		} else {
+			return nil
+		}
+
+		err := closeModal(g)
+		return err
+	})
+
+	wg.Wait()
+
+	if !val {
+		setModalMessage(g, "unknown command...")
+	}
 }
