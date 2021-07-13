@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	searchCommand string = "search"
+	loadingViewName string = "Loading"
+	searchCommand   string = "search"
 	// searchByAuthorCommand  = searchCommand + "-author"
 )
 
@@ -245,4 +246,36 @@ func resetCursor(v *gocui.View) {
 		v.SetCursor(screen.cl.OriginX, screen.cl.OriginY)
 		v.SetOrigin(screen.cl.OriginX, screen.cl.OriginY)
 	}
+}
+
+func openLoadingScreen(g *gocui.Gui) error {
+	maxX, maxY := g.Size()
+	if lv, err := g.SetView(loadingViewName, maxX/2-10, maxY/2-10, maxX/2+10, maxY/2+10); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		lv.BgColor = gocui.ColorBlack
+		lv.FgColor = gocui.ColorWhite
+		lv.Write([]byte("Loading..."))
+
+		g.Cursor = false
+		g.SetViewOnTop(lv.Name())
+		g.SetCurrentView(lv.Name())
+	}
+
+	return nil
+}
+
+func closeLoadingScreen(g *gocui.Gui) error {
+	lv, err := g.View(loadingViewName)
+	if err != nil {
+		return err
+	}
+	lv.Clear()
+
+	g.DeleteView(lv.Name())
+	g.SetCurrentView(views.SearchBarName)
+	g.Cursor = true
+	return nil
 }

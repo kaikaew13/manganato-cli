@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/jroimartin/gocui"
-	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -46,23 +45,34 @@ func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
 }
 
 func enterCommand(g *gocui.Gui, v *gocui.View) error {
-	s := v.Buffer()
-
-	x, y := v.Origin()
-	if err := v.SetCursor(x, y); err != nil {
+	if err := openLoadingScreen(g); err != nil {
 		return err
 	}
 
-	v.Clear()
+	go func() {
+		g.Update(func(g *gocui.Gui) error {
+			s := v.Buffer()
 
-	valid, cmd, args := validateCommand(s)
-	if valid {
-		screen.sb.SaveCommand(s)
+			x, y := v.Origin()
+			if err := v.SetCursor(x, y); err != nil {
+				return err
+			}
 
-		if err := runCommand(cmd, args); err != nil {
+			v.Clear()
+
+			valid, cmd, args := validateCommand(s)
+			if valid {
+				screen.sb.SaveCommand(s)
+
+				if err := runCommand(cmd, args); err != nil {
+					return err
+				}
+			}
+
+			err := closeLoadingScreen(g)
 			return err
-		}
-	}
+		})
+	}()
 
 	return nil
 }
@@ -101,30 +111,4 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 	err := downloadChapter(s)
 
 	return err
-}
-
-func openLoadingScreen(g *gocui.Gui, v *gocui.View) error {
-	maxX, maxY := g.Size()
-	if lv, err := g.SetView("loading", maxX/2-10, maxY/2-10, maxX/2+10, maxY/2+10); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
-
-		lv.BgColor = gocui.ColorBlack
-		lv.FgColor = gocui.ColorWhite
-		g.SetViewOnTop("loading")
-		g.SetCurrentView("loading")
-		lv.Write([]byte("Loading..."))
-	}
-
-	return nil
-}
-
-func closeLoadingScreen(g *gocui.Gui, v *gocui.View) error {
-	lv, _ := g.View("loading")
-	lv.Clear()
-
-	g.DeleteView(lv.Name())
-	g.SetCurrentView(views.SearchBarName)
-	return nil
 }
