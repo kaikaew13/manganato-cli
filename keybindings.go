@@ -18,7 +18,24 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
-	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyEnter, gocui.ModNone, enterCommand); err != nil {
+	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyEnter, gocui.ModNone, func(g *gocui.Gui, v *gocui.View) error {
+		if err := openLoadingScreen(g, v); err != nil {
+			return err
+		}
+
+		go func() {
+			g.Update(func(g *gocui.Gui) error {
+				if err := enterCommand(g, v); err != nil {
+					return err
+				}
+				err := closeLoadingScreen(g, v)
+
+				return err
+			})
+		}()
+
+		return nil
+	}); err != nil {
 		return err
 	}
 

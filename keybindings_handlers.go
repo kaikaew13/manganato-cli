@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/jroimartin/gocui"
+	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -100,4 +101,30 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 	err := downloadChapter(s)
 
 	return err
+}
+
+func openLoadingScreen(g *gocui.Gui, v *gocui.View) error {
+	maxX, maxY := g.Size()
+	if lv, err := g.SetView("loading", maxX/2-10, maxY/2-10, maxX/2+10, maxY/2+10); err != nil {
+		if err != gocui.ErrUnknownView {
+			return err
+		}
+
+		lv.BgColor = gocui.ColorBlack
+		lv.FgColor = gocui.ColorWhite
+		g.SetViewOnTop("loading")
+		g.SetCurrentView("loading")
+		lv.Write([]byte("Loading..."))
+	}
+
+	return nil
+}
+
+func closeLoadingScreen(g *gocui.Gui, v *gocui.View) error {
+	lv, _ := g.View("loading")
+	lv.Clear()
+
+	g.DeleteView(lv.Name())
+	g.SetCurrentView(views.SearchBarName)
+	return nil
 }
