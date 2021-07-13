@@ -21,7 +21,6 @@ github.com/golang/protobuf v1.3.1 h1:YF8+flBXS5eO826T4nzqPrxfhQThhXl0YzfuUPu4SBg
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/jroimartin/gocui v0.4.0 h1:52jnalstgmc25FmtGcWqa0tcbMEWS6RpFLsOIO+I+E8=
 github.com/jroimartin/gocui v0.4.0/go.mod h1:7i7bbj99OgFHzo7kB2zPb8pXLqMBSQegY7azfqXMkyY=
-github.com/kaikaew13/manganato-api v0.0.0-20210712082219-d44729028d61/go.mod h1:bOhNsWcYdsT4QU/SJltXoK+nuSNcjR3C7IAvklou7F4=
 github.com/kaikaew13/manganato-api v0.0.0-20210713065831-e51483150d50 h1:fM5u0AZ1fITRp0LYdR2ibyiWDwA+0IbWMIwslV1SzBk=
 github.com/kaikaew13/manganato-api v0.0.0-20210713065831-e51483150d50/go.mod h1:bOhNsWcYdsT4QU/SJltXoK+nuSNcjR3C7IAvklou7F4=
 github.com/kennygrant/sanitize v1.2.4 h1:gN25/otpP5vAsO2djbMhF/LQX6R7+O1TB4yv8NzpJ3o=
