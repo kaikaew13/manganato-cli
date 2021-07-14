@@ -17,19 +17,14 @@ import (
 )
 
 const (
-	manganatoURL          string = "https://readmanganato.com/"
-	modalViewName         string = "Modal"
+	manganatoURL  string = "https://readmanganato.com/"
+	modalViewName string = "Modal"
+
+	// list of commands
 	searchCommand         string = "search"
 	searchByAuthorCommand        = searchCommand + "-author"
 	searchByGenreCommand         = searchCommand + "-genre"
 )
-
-var viewNames = []string{
-	views.SearchBarName,
-	views.SearchListName,
-	views.MangaDetailsName,
-	views.ChapterListName,
-}
 
 func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
@@ -55,6 +50,16 @@ func layout(g *gocui.Gui) error {
 	}
 
 	return nil
+}
+
+func getViewNames(g *gocui.Gui) []string {
+	viewNames := []string{}
+
+	for _, v := range g.Views() {
+		viewNames = append(viewNames, v.Name())
+	}
+
+	return viewNames
 }
 
 func getInitialScreen() error {
@@ -190,13 +195,12 @@ func processCommand(g *gocui.Gui, v *gocui.View) {
 	wg.Wait()
 
 	if !val {
-		setModalMessage(g, "unknown command...")
+		setClosingMessage(g, "unknown command...")
 	}
 }
 
 func trimViewLine(v *gocui.View) string {
 	_, y := v.Cursor()
-
 	s, _ := v.Line(y)
 
 	return strings.TrimSpace(s)
@@ -341,7 +345,7 @@ func closeModal(g *gocui.Gui) error {
 
 // sets a modal message to msg then close the modal
 // after one second
-func setModalMessage(g *gocui.Gui, msg string) {
+func setClosingMessage(g *gocui.Gui, msg string) {
 	var wg sync.WaitGroup
 	wg.Add(1)
 

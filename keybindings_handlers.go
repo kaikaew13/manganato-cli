@@ -11,14 +11,15 @@ func quit(g *gocui.Gui, v *gocui.View) error {
 func switchView(g *gocui.Gui, v *gocui.View) error {
 	resetCursor(v)
 
-	for i, name := range viewNames {
+	vNames := getViewNames(g)
+	for i, name := range vNames {
 		if name == v.Name() {
-			if i == len(viewNames)-1 {
-				g.SetCurrentView(viewNames[0])
+			if i == len(vNames)-1 {
+				g.SetCurrentView(vNames[0])
 				break
 			}
 
-			g.SetCurrentView(viewNames[i+1])
+			g.SetCurrentView(vNames[i+1])
 			break
 		}
 	}
@@ -29,14 +30,15 @@ func switchView(g *gocui.Gui, v *gocui.View) error {
 func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
 	resetCursor(v)
 
-	for i, name := range viewNames {
+	vNames := getViewNames(g)
+	for i, name := range vNames {
 		if name == v.Name() {
 			if i == 0 {
-				g.SetCurrentView(viewNames[len(viewNames)-1])
+				g.SetCurrentView(vNames[len(vNames)-1])
 				break
 			}
 
-			g.SetCurrentView(viewNames[i-1])
+			g.SetCurrentView(vNames[i-1])
 			break
 		}
 	}
