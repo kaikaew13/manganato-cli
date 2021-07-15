@@ -7,6 +7,7 @@ import (
 
 var screen Screen
 
+// contains every main views and nato.Searcher
 type Screen struct {
 
 	// gocui's View with some extra fields
