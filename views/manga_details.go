@@ -10,6 +10,8 @@ import (
 
 const mangaDetailsName string = "MangaDetails"
 
+// contains *gocui.View and data related
+// to Manga eg. nato.Manga's struct
 type MangaDetails struct {
 	View        *gocui.View
 	Name        string
@@ -19,6 +21,7 @@ type MangaDetails struct {
 	OriginY     int
 }
 
+// initiates MangaDetails and sets MangaDetails view by calling g.SetView
 func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	md := MangaDetails{}
 	x0, y0, x1, y1 := md.GetCoords(maxX, maxY)
@@ -47,10 +50,12 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	return &md, err
 }
 
+// returns a dimension relavtive to screen's width and height
 func (md *MangaDetails) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 	return maxX / 2, 1, maxX - 1, ((maxY - SearchBarHeight - 1) / 2) - 1
 }
 
+// formats manga into more readable format
 func (md *MangaDetails) FormatManga() string {
 	s := "\n\n"
 
@@ -61,7 +66,11 @@ func (md *MangaDetails) FormatManga() string {
 	var genres string
 	for _, v := range md.Manga.Genres {
 		genres += v.GenreName + "\t"
+
+		// maps genres to ids so user can search by genre
 		md.NameToIDMap[v.GenreName] = v.ID
+		// improves user experience by allowing to search with
+		// all lower case or all upper case
 		md.NameToIDMap[strings.ToLower(v.GenreName)] = v.ID
 		md.NameToIDMap[strings.ToUpper(v.GenreName)] = v.ID
 	}

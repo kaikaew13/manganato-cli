@@ -9,12 +9,15 @@ const (
 	searchBarName   string = "SearchBar"
 )
 
+// contains *gocui.View and data related
+// to SearchBar eg. Commands
 type SearchBar struct {
 	View     *gocui.View
 	Name     string
 	Commands *[]string
 }
 
+// initiates SearchBar and sets SearchBar view by calling g.SetView
 func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sb := SearchBar{}
 	x0, y0, x1, y1 := sb.GetCoords(maxX, maxY)
@@ -38,6 +41,7 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	return &sb, err
 }
 
+// returns a dimension relavtive to screen's width and height
 func (sb *SearchBar) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 	return 1, maxY - SearchBarHeight - 1, maxX - 1, maxY - 1
 }
@@ -60,6 +64,7 @@ func (sb *SearchBar) SaveCommand(cmd string) {
 	*sb.Commands = append(*sb.Commands, removeNewline(cmd))
 }
 
+// returns a previously processed command
 func (sb *SearchBar) GetPrevCommand(cmd string) string {
 	cmds := *sb.Commands
 
@@ -83,6 +88,7 @@ func (sb *SearchBar) GetPrevCommand(cmd string) string {
 	return cmds[len(cmds)-1]
 }
 
+// same with GetPrevCommand but get the following command instead
 func (sb *SearchBar) GetNextCommand(cmd string) string {
 	cmds := *sb.Commands
 

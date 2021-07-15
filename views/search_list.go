@@ -10,6 +10,8 @@ import (
 
 const searchListName string = "SearchList"
 
+// contains *gocui.View and data related
+// to SearchList eg. Mangas (slice of nato.Manga)
 type SearchList struct {
 	View        *gocui.View
 	Name        string
@@ -19,6 +21,7 @@ type SearchList struct {
 	OriginY     int
 }
 
+// initiates SearchList and sets SearchList view by calling g.SetView
 func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	sl := SearchList{}
 	x0, y0, x1, y1 := sl.GetCoords(maxX, maxY)
@@ -47,24 +50,26 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	return &sl, err
 }
 
+// returns a dimension relavtive to screen's width and height
 func (sl *SearchList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 	return 1, 1, maxX/2 - 1, maxY - SearchBarHeight - 2
 }
 
+// formats a list of manga into a list-like format
 func (sl *SearchList) FormatMangas() string {
 	s := fmt.Sprintf("\t\t\tpress ENTER on the manga title(%s) to start reading\n\n", Selector)
 
 	for _, mg := range sl.Mangas {
 		s += fmt.Sprintf("\t%s %s\n\t\tAuthor: %s\n\n", Selector, mg.Name, mg.Author.Name)
+
+		// maps names to ids so user can search by name
 		sl.NameToIDMap[mg.Name] = mg.ID
 		sl.NameToIDMap[mg.Author.Name] = mg.Author.ID
+		// improves user experience by allowing to search with
+		// all lower case or all upper case
 		sl.NameToIDMap[strings.ToLower(mg.Author.Name)] = mg.Author.ID
 		sl.NameToIDMap[strings.ToUpper(mg.Author.Name)] = mg.Author.ID
 	}
 
 	return s
-}
-
-func (sl *SearchList) GetBuf() string {
-	return sl.View.Buffer()
 }
