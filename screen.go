@@ -8,9 +8,13 @@ import (
 var screen Screen
 
 type Screen struct {
-	sb       *views.SearchBar
-	sl       *views.SearchList
-	md       *views.MangaDetails
-	cl       *views.ChapterList
+
+	// gocui's View with some extra fields
+	sb *views.SearchBar
+	sl *views.SearchList
+	md *views.MangaDetails
+	cl *views.ChapterList
+
+	// manganato-api's Searcher struct
 	searcher nato.Searcher
 }

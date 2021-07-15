@@ -35,7 +35,7 @@ func layout(g *gocui.Gui) error {
 	}
 
 	x0, y0, x1, y1 = screen.sl.GetCoords(maxX, maxY)
-	if _, err := g.SetView(views.SearchListName, x0, y0, x1, y1); err != nil {
+	if _, err := g.SetView(screen.sl.Name, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
@@ -111,8 +111,8 @@ func removePref(s string, prefLen int) string {
 
 func validateCommand(s string) (valid bool, cmd, args string) {
 
-	// has to be checked before searchCommand because has 'search' as
-	// a prefix
+	// has to be checked before searchCommand because has 'search'
+	// as a prefix
 	switch {
 	case strings.HasPrefix(s, searchByAuthorCommand):
 		valid = true
@@ -299,7 +299,7 @@ func downloadPage(fp, url string) error {
 
 func resetCursor(v *gocui.View) {
 	switch v.Name() {
-	case views.SearchListName:
+	case screen.sl.Name:
 		v.SetCursor(screen.sl.OriginX, screen.sl.OriginY)
 		v.SetOrigin(screen.sl.OriginX, screen.sl.OriginY)
 	case views.MangaDetailsName:

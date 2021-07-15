@@ -8,10 +8,11 @@ import (
 	nato "github.com/kaikaew13/manganato-api"
 )
 
-const SearchListName string = "SearchList"
+const searchListName string = "SearchList"
 
 type SearchList struct {
 	View        *gocui.View
+	Name        string
 	Mangas      []nato.Manga
 	NameToIDMap map[string]string
 	OriginX     int
@@ -22,12 +23,12 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	sl := SearchList{}
 	x0, y0, x1, y1 := sl.GetCoords(maxX, maxY)
 
-	slView, err := g.SetView(SearchListName, x0, y0, x1, y1)
+	slView, err := g.SetView(searchListName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
-	slView.Title = SearchListName
+	slView.Title = searchListName
 	slView.SelFgColor = gocui.ColorBlack
 	slView.SelBgColor = gocui.ColorGreen
 	slView.BgColor = gocui.ColorBlack
@@ -38,6 +39,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 	slView.Editor = readOnlyEditor
 
 	sl.View = slView
+	sl.Name = searchListName
 	sl.Mangas = make([]nato.Manga, 0)
 	sl.NameToIDMap = make(map[string]string)
 	sl.OriginX, sl.OriginY = slView.Origin()
