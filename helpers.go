@@ -30,7 +30,7 @@ func layout(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
 
 	x0, y0, x1, y1 := screen.sb.GetCoords(maxX, maxY)
-	if _, err := g.SetView(views.SearchBarName, x0, y0, x1, y1); err != nil {
+	if _, err := g.SetView(screen.sb.Name, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
@@ -40,7 +40,7 @@ func layout(g *gocui.Gui) error {
 	}
 
 	x0, y0, x1, y1 = screen.md.GetCoords(maxX, maxY)
-	if _, err := g.SetView(views.MangaDetailsName, x0, y0, x1, y1); err != nil {
+	if _, err := g.SetView(screen.md.Name, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
@@ -302,7 +302,7 @@ func resetCursor(v *gocui.View) {
 	case screen.sl.Name:
 		v.SetCursor(screen.sl.OriginX, screen.sl.OriginY)
 		v.SetOrigin(screen.sl.OriginX, screen.sl.OriginY)
-	case views.MangaDetailsName:
+	case screen.md.Name:
 		v.SetCursor(screen.md.OriginX, screen.md.OriginY)
 		v.SetOrigin(screen.md.OriginX, screen.md.OriginY)
 	case views.ChapterListName:
@@ -338,7 +338,7 @@ func closeModal(g *gocui.Gui) error {
 	lv.Clear()
 
 	g.DeleteView(lv.Name())
-	g.SetCurrentView(views.SearchBarName)
+	g.SetCurrentView(screen.sb.Name)
 	g.Cursor = true
 	return nil
 }

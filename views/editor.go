@@ -24,7 +24,7 @@ func edit(v *gocui.View, key gocui.Key, ch rune, mod gocui.Modifier) {
 }
 
 func moveHorizontally(v *gocui.View, dir int) {
-	if v.Name() != MangaDetailsName {
+	if v.Name() != mangaDetailsName {
 		return
 	}
 
@@ -34,7 +34,7 @@ func moveHorizontally(v *gocui.View, dir int) {
 func findNextLine(v *gocui.View) {
 	_, y := v.Cursor()
 
-	if v.Name() == MangaDetailsName {
+	if v.Name() == mangaDetailsName {
 		v.MoveCursor(0, 1, false)
 		return
 	}
@@ -59,7 +59,7 @@ func findNextLine(v *gocui.View) {
 func findPrevLine(v *gocui.View) {
 	_, y := v.Cursor()
 
-	if v.Name() == MangaDetailsName {
+	if v.Name() == mangaDetailsName {
 		v.MoveCursor(0, -1, false)
 		return
 	}

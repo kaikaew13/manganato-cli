@@ -25,15 +25,15 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
-	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyEnter, gocui.ModNone, enterCommand); err != nil {
+	if err := g.SetKeybinding(screen.sb.Name, gocui.KeyEnter, gocui.ModNone, enterCommand); err != nil {
 		return err
 	}
 
-	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyArrowUp, gocui.ModNone, getPrevCommand); err != nil {
+	if err := g.SetKeybinding(screen.sb.Name, gocui.KeyArrowUp, gocui.ModNone, getPrevCommand); err != nil {
 		return err
 	}
 
-	if err := g.SetKeybinding(views.SearchBarName, gocui.KeyArrowDown, gocui.ModNone, getNextCommand); err != nil {
+	if err := g.SetKeybinding(screen.sb.Name, gocui.KeyArrowDown, gocui.ModNone, getNextCommand); err != nil {
 		return err
 	}
 

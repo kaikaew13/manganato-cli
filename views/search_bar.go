@@ -6,11 +6,12 @@ import (
 
 const (
 	SearchBarHeight int    = 2
-	SearchBarName   string = "SearchBar"
+	searchBarName   string = "SearchBar"
 )
 
 type SearchBar struct {
 	View     *gocui.View
+	Name     string
 	Commands *[]string
 }
 
@@ -18,12 +19,12 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sb := SearchBar{}
 	x0, y0, x1, y1 := sb.GetCoords(maxX, maxY)
 
-	sbView, err := g.SetView(SearchBarName, x0, y0, x1, y1)
+	sbView, err := g.SetView(searchBarName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
-	sbView.Title = SearchBarName
+	sbView.Title = searchBarName
 	sbView.SelFgColor = gocui.ColorGreen
 	sbView.BgColor = gocui.ColorBlack
 	sbView.FgColor = gocui.ColorWhite
@@ -32,6 +33,7 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	cmds := make([]string, 0)
 
 	sb.View = sbView
+	sb.Name = searchBarName
 	sb.Commands = &cmds
 	return &sb, err
 }

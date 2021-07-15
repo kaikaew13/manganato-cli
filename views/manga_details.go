@@ -8,10 +8,11 @@ import (
 	nato "github.com/kaikaew13/manganato-api"
 )
 
-const MangaDetailsName string = "MangaDetails"
+const mangaDetailsName string = "MangaDetails"
 
 type MangaDetails struct {
 	View        *gocui.View
+	Name        string
 	Manga       nato.Manga
 	NameToIDMap map[string]string
 	OriginX     int
@@ -22,12 +23,12 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	md := MangaDetails{}
 	x0, y0, x1, y1 := md.GetCoords(maxX, maxY)
 
-	mdView, err := g.SetView(MangaDetailsName, x0, y0, x1, y1)
+	mdView, err := g.SetView(mangaDetailsName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
-	mdView.Title = MangaDetailsName
+	mdView.Title = mangaDetailsName
 	mdView.SelFgColor = gocui.ColorBlack
 	mdView.SelBgColor = gocui.ColorGreen
 	mdView.BgColor = gocui.ColorBlack
@@ -38,6 +39,7 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 	mdView.Editor = readOnlyEditor
 
 	md.View = mdView
+	md.Name = mangaDetailsName
 	md.Manga = nato.Manga{}
 	md.NameToIDMap = make(map[string]string)
 	md.OriginX, md.OriginY = mdView.Origin()

@@ -43,7 +43,7 @@ func main() {
 		}
 
 		// sets cursor to SearchBar when program first started
-		if _, err = g.SetCurrentView(views.SearchBarName); err != nil {
+		if _, err = g.SetCurrentView(screen.sb.Name); err != nil {
 			log.Panicln(err)
 		}
 	}
