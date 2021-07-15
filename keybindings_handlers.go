@@ -4,10 +4,15 @@ import (
 	"github.com/jroimartin/gocui"
 )
 
+// successfully exits the program
 func quit(g *gocui.Gui, v *gocui.View) error {
+
+	// gocui's special error to indicates
+	// program exits successfully
 	return gocui.ErrQuit
 }
 
+// switches between views in clockwise direction
 func switchView(g *gocui.Gui, v *gocui.View) error {
 	resetCursor(v)
 
@@ -27,6 +32,7 @@ func switchView(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+// switches between views in anti-clockwise direction
 func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
 	resetCursor(v)
 
@@ -46,16 +52,21 @@ func reverseSwitchView(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+// starts processing command typed in SearchBar view
 func enterCommand(g *gocui.Gui, v *gocui.View) error {
 	if err := openModal(g); err != nil {
 		return err
 	}
 
+	// must use go routine when processing command
+	// so it does not block openModal function
+	// (or else user wont see the loading modal)
 	go processCommand(g, v)
 
 	return nil
 }
 
+// returns previously entered command to SearchBar view
 func getPrevCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 	s = screen.sb.GetPrevCommand(s)
@@ -66,6 +77,7 @@ func getPrevCommand(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+// exact opposite of getPrevCommand
 func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 	s = screen.sb.GetNextCommand(s)
@@ -76,6 +88,8 @@ func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 	return nil
 }
 
+// picks a manga and loads its info onto
+// MangaDetails and ChapterList views
 func pickManga(g *gocui.Gui, v *gocui.View) error {
 	s := trimViewLine(v)
 
@@ -84,16 +98,21 @@ func pickManga(g *gocui.Gui, v *gocui.View) error {
 	return err
 }
 
+// picks a chapter and starts downloading its pages
 func pickChapter(g *gocui.Gui, v *gocui.View) error {
 	if err := openModal(g); err != nil {
 		return err
 	}
 
+	// must run downloading process in
+	// go routine or else the it will
+	// block the openModal so loading modal
+	// will not be shown to the user
 	go func() {
 		g.Update(func(g *gocui.Gui) error {
 			s := trimViewLine(v)
 
-			if err := downloadChapter(s); err != nil {
+			if err := prepDownloadChapter(s); err != nil {
 				return nil
 			}
 

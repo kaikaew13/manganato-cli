@@ -42,6 +42,9 @@ func (sb *SearchBar) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 	return 1, maxY - SearchBarHeight - 1, maxX - 1, maxY - 1
 }
 
+// saves a valid command so user can
+// retreive this command when pressing
+// up arrow
 func (sb *SearchBar) SaveCommand(cmd string) {
 	if cmd == "" {
 		return
