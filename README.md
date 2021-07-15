@@ -10,7 +10,9 @@ Unofficial Manganato's manga downloader CUI written in Go.
 ## install
 
 ```
-to be added
+git clone https://github.com/kaikaew13/manganato-cli.git
+cd manganato-cli
+go build
 ```
 
 ## features
