@@ -7,10 +7,11 @@ import (
 	nato "github.com/kaikaew13/manganato-api"
 )
 
-const ChapterListName = "ChapterList"
+const chapterListName = "ChapterList"
 
 type ChapterList struct {
 	View        *gocui.View
+	Name        string
 	MangaName   string
 	MangaID     string
 	Chapters    []nato.Chapter
@@ -23,12 +24,12 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	cl := ChapterList{}
 	x0, y0, x1, y1 := cl.GetCoords(maxX, maxY)
 
-	clView, err := g.SetView(ChapterListName, x0, y0, x1, y1)
+	clView, err := g.SetView(chapterListName, x0, y0, x1, y1)
 	if err != nil && err != gocui.ErrUnknownView {
 		return nil, err
 	}
 
-	clView.Title = ChapterListName
+	clView.Title = chapterListName
 	clView.SelFgColor = gocui.ColorBlack
 	clView.SelBgColor = gocui.ColorGreen
 	clView.BgColor = gocui.ColorBlack
@@ -39,6 +40,7 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 	clView.Editor = readOnlyEditor
 
 	cl.View = clView
+	cl.Name = chapterListName
 	cl.Chapters = make([]nato.Chapter, 0)
 	cl.NameToIDMap = make(map[string]string)
 	cl.OriginX, cl.OriginY = clView.Origin()

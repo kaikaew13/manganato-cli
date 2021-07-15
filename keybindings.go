@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/jroimartin/gocui"
-	"github.com/kaikaew13/manganato-cli/views"
 )
 
 func keybindings(g *gocui.Gui) error {
@@ -41,7 +40,7 @@ func keybindings(g *gocui.Gui) error {
 		return err
 	}
 
-	if err := g.SetKeybinding(views.ChapterListName, gocui.KeyEnter, gocui.ModNone, pickChapter); err != nil {
+	if err := g.SetKeybinding(screen.cl.Name, gocui.KeyEnter, gocui.ModNone, pickChapter); err != nil {
 		return err
 	}
 

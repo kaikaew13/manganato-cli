@@ -45,7 +45,7 @@ func layout(g *gocui.Gui) error {
 	}
 
 	x0, y0, x1, y1 = screen.cl.GetCoords(maxX, maxY)
-	if _, err := g.SetView(views.ChapterListName, x0, y0, x1, y1); err != nil {
+	if _, err := g.SetView(screen.cl.Name, x0, y0, x1, y1); err != nil {
 		return err
 	}
 
@@ -305,7 +305,7 @@ func resetCursor(v *gocui.View) {
 	case screen.md.Name:
 		v.SetCursor(screen.md.OriginX, screen.md.OriginY)
 		v.SetOrigin(screen.md.OriginX, screen.md.OriginY)
-	case views.ChapterListName:
+	case screen.cl.Name:
 		v.SetCursor(screen.cl.OriginX, screen.cl.OriginY)
 		v.SetOrigin(screen.cl.OriginX, screen.cl.OriginY)
 	}
