@@ -25,8 +25,9 @@ func main() {
 	// while others will be yellow)
 	g.Highlight = true
 	g.BgColor = gocui.ColorBlack
-	// sets border color to be yellow
+	// sets border color to be yellow when unfocused
 	g.FgColor = gocui.ColorYellow
+	g.SelFgColor = gocui.ColorGreen
 	g.Cursor = true
 
 	// layout function gets executed on every

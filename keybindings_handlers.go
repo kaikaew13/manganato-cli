@@ -70,6 +70,9 @@ func enterCommand(g *gocui.Gui, v *gocui.View) error {
 func getPrevCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 	s = screen.sb.GetPrevCommand(s)
+	if len(s) == 0 {
+		resetCursor(v)
+	}
 
 	v.Clear()
 	v.Write([]byte(s))
@@ -81,6 +84,9 @@ func getPrevCommand(g *gocui.Gui, v *gocui.View) error {
 func getNextCommand(g *gocui.Gui, v *gocui.View) error {
 	s := v.Buffer()
 	s = screen.sb.GetNextCommand(s)
+	if len(s) == 0 {
+		resetCursor(v)
+	}
 
 	v.Clear()
 	v.Write([]byte(s))

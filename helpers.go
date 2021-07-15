@@ -359,6 +359,9 @@ func resetCursor(v *gocui.View) {
 	case screen.cl.Name:
 		v.SetCursor(screen.cl.OriginX, screen.cl.OriginY)
 		v.SetOrigin(screen.cl.OriginX, screen.cl.OriginY)
+	case screen.sb.Name:
+		v.SetCursor(screen.sb.OriginX, screen.sb.OriginY)
+		v.SetOrigin(screen.sb.OriginX, screen.sb.OriginY)
 	}
 }
 

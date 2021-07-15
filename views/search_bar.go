@@ -15,6 +15,8 @@ type SearchBar struct {
 	View     *gocui.View
 	Name     string
 	Commands *[]string
+	OriginX  int
+	OriginY  int
 }
 
 // initiates SearchBar and sets SearchBar view by calling g.SetView
@@ -38,6 +40,7 @@ func GetSearchBar(maxX, maxY int, g *gocui.Gui) (*SearchBar, error) {
 	sb.View = sbView
 	sb.Name = searchBarName
 	sb.Commands = &cmds
+	sb.OriginX, sb.OriginY = sbView.Origin()
 	return &sb, err
 }
 
@@ -79,6 +82,7 @@ func (sb *SearchBar) GetPrevCommand(cmd string) string {
 	for i, v := range cmds {
 		if v == removeNewline(cmd) {
 			if i-1 < 0 {
+
 				return ""
 			}
 			return cmds[i-1]
