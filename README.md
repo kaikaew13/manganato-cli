@@ -2,6 +2,10 @@
 
 Unofficial Manganato's manga downloader CUI written in Go.
 
+## preview
+
+![theone](https://user-images.githubusercontent.com/77256757/125905259-c68ec426-a84b-40f3-99de-136623718bb2.gif)
+
 ## dependencies
 
 - [gocui](https://github.com/jroimartin/gocui) for CUI
@@ -24,6 +28,8 @@ go build
    - display its details in manga details view
    - display its list of chapters in chapterlist view
 5. select a chapter and download it to your own computer
+
+**note:** the downloaded chapters can be found in HOMEDIR/Desktop/manganato-cli directory
 
 ## usage
 
@@ -62,3 +68,8 @@ keybindings:
 - SearchList: displays a list of mangas
 - MangaDetails: displays details of the manga user picked, example: alternative names, genres, views, etc
 - ChapterList: displays a list of chapters of the manga user picked
+
+## credits
+
+- [gocui](https://github.com/jroimartin/gocui) for CUI
+- [gocolly](https://github.com/gocolly/colly) for web scraper
