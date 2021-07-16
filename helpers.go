@@ -133,15 +133,29 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 	// as a prefix
 	switch {
 	case strings.HasPrefix(s, searchByAuthorCommand):
+
+		// avoid user to just type command without args
+		if len(s) <= len(searchByAuthorCommand)+1 {
+			return
+		}
+
 		valid = true
 		cmd = searchByAuthorCommand
 		// extracts what's after the command
 		args = removePref(s[:len(s)-1], len(searchByAuthorCommand))
 	case strings.HasPrefix(s, searchByGenreCommand):
+		if len(s) <= len(searchByGenreCommand)+1 {
+			return
+		}
+
 		valid = true
 		cmd = searchByGenreCommand
 		args = removePref(s[:len(s)-1], len(searchByGenreCommand))
 	case strings.HasPrefix(s, searchCommand):
+		if len(s) <= len(searchCommand)+1 {
+			return
+		}
+
 		valid = true
 		cmd = searchCommand
 		args = removePref(s[:len(s)-1], len(searchCommand))
