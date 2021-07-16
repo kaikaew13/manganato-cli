@@ -5,10 +5,8 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/user"
 	"path/filepath"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/jroimartin/gocui"
@@ -203,7 +201,6 @@ func runCommand(cmd, args string) error {
 // this function gets called as a go routine
 func processCommand(g *gocui.Gui, v *gocui.View) {
 	var val bool
-	var wg sync.WaitGroup
 
 	wg.Add(1)
 
@@ -278,20 +275,11 @@ func prepDownloadChapter(s string) error {
 }
 
 func downloadChapter(pgs []nato.Page, chapterName string) error {
-
-	// user has user.HomeDir which will be used
-	// to specify the download path
-	user, err := user.Current()
+	dirpath, err := getDirPath(chapterName)
 	if err != nil {
 		return err
 	}
 
-	dirpath, err := getDirPath(user.HomeDir, chapterName)
-	if err != nil {
-		return err
-	}
-
-	var wg sync.WaitGroup
 	wg.Add(len(pgs))
 
 	// downloads each page concurrently
@@ -316,12 +304,12 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 	return nil
 }
 
-// specify download path to Desktop/manganato-cli
+// specify download path to ./download
 // if the directory does not exist then create a new one
 // with that name
-func getDirPath(homedir, chapterName string) (dirpath string, err error) {
+func getDirPath(chapterName string) (dirpath string, err error) {
 	dirpath = filepath.Join(
-		homedir, "Desktop", "manganato-cli", screen.cl.MangaName,
+		"download", screen.cl.MangaName,
 		screen.cl.NameToIDMap[chapterName],
 	)
 	err = os.MkdirAll(dirpath, 0755)
@@ -419,7 +407,6 @@ func closeModal(g *gocui.Gui) error {
 // sets a modal message to msg then close
 // the modal after one second
 func setClosingMessage(g *gocui.Gui, msg string) {
-	var wg sync.WaitGroup
 	wg.Add(1)
 
 	g.Update(func(g *gocui.Gui) error {

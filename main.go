@@ -2,11 +2,14 @@ package main
 
 import (
 	"log"
+	"sync"
 
 	"github.com/jroimartin/gocui"
 	nato "github.com/kaikaew13/manganato-api"
 	"github.com/kaikaew13/manganato-cli/views"
 )
+
+var wg sync.WaitGroup
 
 func main() {
 
