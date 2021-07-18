@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/user"
 	"path/filepath"
 	"strings"
 	"time"
@@ -275,7 +276,15 @@ func prepDownloadChapter(s string) error {
 }
 
 func downloadChapter(pgs []nato.Page, chapterName string) error {
-	dirpath, err := getDirPath(chapterName)
+
+	// user has user.HomeDir which will be used
+	// to specify the download path
+	user, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	dirpath, err := getDirPath(user.HomeDir, chapterName)
 	if err != nil {
 		return err
 	}
@@ -304,12 +313,12 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 	return nil
 }
 
-// specify download path to ./download
+// specify download path to Desktop/manganato-cli
 // if the directory does not exist then create a new one
 // with that name
-func getDirPath(chapterName string) (dirpath string, err error) {
+func getDirPath(homedir, chapterName string) (dirpath string, err error) {
 	dirpath = filepath.Join(
-		"download", screen.cl.MangaName,
+		homedir, "Desktop", "manganato-cli", screen.cl.MangaName,
 		screen.cl.NameToIDMap[chapterName],
 	)
 	err = os.MkdirAll(dirpath, 0755)

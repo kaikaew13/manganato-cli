@@ -29,7 +29,7 @@ go build
    - display its list of chapters in chapterlist view
 5. select a chapter and download it to your own computer
 
-**note:** the downloaded chapters can be found in ./download in the root of the project directory
+**note:** the downloaded chapters can be found in Desktop/manganato-cli directory
 
 ## usage
 
