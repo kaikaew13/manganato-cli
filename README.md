@@ -64,7 +64,7 @@ keybindings:
 
 ## views
 
-<img width="1440" alt="Screen Shot 2564-07-16 at 11 44 04" src="https://user-images.githubusercontent.com/77256757/125893113-ec07749e-b862-4db7-a5dd-93fe588ee9cf.png">
+<img width="1440" alt="Screen Shot 2564-07-19 at 13 43 47" src="https://user-images.githubusercontent.com/77256757/126114728-1aeb5fa8-33f6-4428-b756-417bca04cac4.png">
 
 - SearchBar: allows user to search for manga
 - SearchList: displays a list of mangas
