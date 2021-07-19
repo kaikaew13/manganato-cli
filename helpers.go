@@ -141,7 +141,7 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 		valid = true
 		cmd = searchByAuthorCommand
 		// extracts what's after the command
-		args = removePref(s[:len(s)-1], len(searchByAuthorCommand))
+		args = removePref(s, len(searchByAuthorCommand))
 	case strings.HasPrefix(s, searchByGenreCommand):
 		if len(s) <= len(searchByGenreCommand)+1 {
 			return
@@ -149,7 +149,7 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 
 		valid = true
 		cmd = searchByGenreCommand
-		args = removePref(s[:len(s)-1], len(searchByGenreCommand))
+		args = removePref(s, len(searchByGenreCommand))
 	case strings.HasPrefix(s, searchCommand):
 		if len(s) <= len(searchCommand)+1 {
 			return
@@ -157,7 +157,7 @@ func validateCommand(s string) (valid bool, cmd, args string) {
 
 		valid = true
 		cmd = searchCommand
-		args = removePref(s[:len(s)-1], len(searchCommand))
+		args = removePref(s, len(searchCommand))
 	}
 
 	return
@@ -218,7 +218,7 @@ func processCommand(g *gocui.Gui, v *gocui.View) {
 		}
 		v.Clear()
 
-		valid, cmd, args := validateCommand(s)
+		valid, cmd, args := validateCommand(s[:len(s)-1])
 		if valid {
 			val = valid
 			// saves a valid command to SearchBar's Commands slice

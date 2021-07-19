@@ -33,7 +33,7 @@ func GetMangaDetails(maxX, maxY int, g *gocui.Gui) (*MangaDetails, error) {
 
 	mdView.Title = mangaDetailsName
 	mdView.SelFgColor = gocui.ColorBlack
-	mdView.SelBgColor = gocui.ColorGreen
+	mdView.SelBgColor = gocui.ColorYellow
 	mdView.BgColor = gocui.ColorBlack
 	mdView.FgColor = gocui.ColorWhite
 	mdView.Highlight = true
@@ -59,9 +59,9 @@ func (md *MangaDetails) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 func (md *MangaDetails) FormatManga() string {
 	s := "\n\n"
 
-	s += fmt.Sprintf("\t\tTITLE: %s\n\n", md.Manga.Name)
-	s += fmt.Sprintf("\t\tALT_NAME: %s\n\n", md.Manga.Alternatives)
-	s += fmt.Sprintf("\t\tSTATUS: %s\n\n", md.Manga.Status)
+	s += fmt.Sprintf("\t\t\u001b[33mTITLE:\u001b[0m %s\n\n", md.Manga.Name)
+	s += fmt.Sprintf("\t\t\u001b[33mALT_NAME:\u001b[0m %s\n\n", md.Manga.Alternatives)
+	s += fmt.Sprintf("\t\t\u001b[33mSTATUS:\u001b[0m %s\n\n", md.Manga.Status)
 
 	var genres string
 	for _, v := range md.Manga.Genres {
@@ -75,12 +75,12 @@ func (md *MangaDetails) FormatManga() string {
 		md.NameToIDMap[strings.ToUpper(v.GenreName)] = v.ID
 	}
 
-	s += fmt.Sprintf("\t\tGENRES: %s\n\n", genres)
-	s += fmt.Sprintf("\t\tAUTHOR: %s\n\n", md.Manga.Author.Name)
-	s += fmt.Sprintf("\t\tUPDATED: %s\n\n", md.Manga.Updated)
-	s += fmt.Sprintf("\t\tVIEWS: %s\n\n", md.Manga.Views)
-	s += fmt.Sprintf("\t\tRATING: %s\n\n", md.Manga.Rating)
-	s += fmt.Sprintf("\t\tDESCRIPTION: %s\n\n", md.Manga.Description)
+	s += fmt.Sprintf("\t\t\u001b[33mGENRES:\u001b[0m %s\n\n", genres)
+	s += fmt.Sprintf("\t\t\u001b[33mAUTHOR:\u001b[0m %s\n\n", md.Manga.Author.Name)
+	s += fmt.Sprintf("\t\t\u001b[33mUPDATED:\u001b[0m %s\n\n", md.Manga.Updated)
+	s += fmt.Sprintf("\t\t\u001b[33mVIEWS:\u001b[0m %s\n\n", md.Manga.Views)
+	s += fmt.Sprintf("\t\t\u001b[33mRATING:\u001b[0m %s\n\n", md.Manga.Rating)
+	s += fmt.Sprintf("\t\t\u001b[33mDESCRIPTION:\u001b[0m %s\n\n", md.Manga.Description)
 
 	return s
 }

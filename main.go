@@ -29,7 +29,7 @@ func main() {
 	g.Highlight = true
 	g.BgColor = gocui.ColorBlack
 	// sets border color to be yellow when unfocused
-	g.FgColor = gocui.ColorYellow
+	g.FgColor = gocui.ColorWhite
 	g.SelFgColor = gocui.ColorGreen
 	g.SelBgColor = gocui.ColorBlack
 	g.Cursor = true

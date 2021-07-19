@@ -34,7 +34,7 @@ func GetChapterList(maxX, maxY int, g *gocui.Gui) (*ChapterList, error) {
 
 	clView.Title = chapterListName
 	clView.SelFgColor = gocui.ColorBlack
-	clView.SelBgColor = gocui.ColorGreen
+	clView.SelBgColor = gocui.ColorMagenta
 	clView.BgColor = gocui.ColorBlack
 	clView.FgColor = gocui.ColorWhite
 	clView.Highlight = true
@@ -58,11 +58,11 @@ func (cl *ChapterList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 
 // formats chapters into a table like format
 func (cl *ChapterList) FormatChapters() string {
-	s := "\n\t\t\tCHAPTER NAME\t\t\t\t\tVIEWS\t\t\tUPLOADED\n\n"
+	s := "\n\t\t\t\u001b[35mCHAPTER NAME\t\t\t\t\tVIEWS\t\t\tUPLOADED\u001b[0m\n\n"
 
 	for _, chapter := range cl.Chapters {
 		s += fmt.Sprintf(
-			"\t\t\t%s %s\t\t\t\t%s\t\t\t%s\n\n",
+			"\t\t\t%s \u001b[35m%s\u001b[0m\t\t\t\t%s\t\t\t%s\n\n",
 			Selector, chapter.ChapterName, chapter.Views, chapter.Uploaded,
 		)
 

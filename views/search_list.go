@@ -33,7 +33,7 @@ func GetSearchList(maxX, maxY int, g *gocui.Gui) (*SearchList, error) {
 
 	slView.Title = searchListName
 	slView.SelFgColor = gocui.ColorBlack
-	slView.SelBgColor = gocui.ColorGreen
+	slView.SelBgColor = gocui.ColorCyan
 	slView.BgColor = gocui.ColorBlack
 	slView.FgColor = gocui.ColorWhite
 	slView.Highlight = true
@@ -57,10 +57,10 @@ func (sl *SearchList) GetCoords(maxX, maxY int) (x0, y0, x1, y1 int) {
 
 // formats a list of manga into a list-like format
 func (sl *SearchList) FormatMangas() string {
-	s := fmt.Sprintf("\t\t\tpress ENTER on the manga title(%s) to start reading\n\n", Selector)
+	s := fmt.Sprintf("\t\t\t\u001b[36mpress ENTER on the manga title(%s) to start reading\u001b[0m\n\n", Selector)
 
 	for _, mg := range sl.Mangas {
-		s += fmt.Sprintf("\t%s %s\n\t\tAuthor: %s\n\n", Selector, mg.Name, mg.Author.Name)
+		s += fmt.Sprintf("\t%s %s\n\t\t\u001b[36mAuthor: %s\u001b[0m\n\n", Selector, mg.Name, mg.Author.Name)
 
 		// maps names to ids so user can search by name
 		sl.NameToIDMap[mg.Name] = mg.ID
