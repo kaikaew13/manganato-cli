@@ -6,7 +6,7 @@ Unofficial Manganato's manga downloader CUI written in Go.
 
 ## preview
 
-![theone](https://user-images.githubusercontent.com/77256757/125905259-c68ec426-a84b-40f3-99de-136623718bb2.gif)
+![mangagif](https://user-images.githubusercontent.com/77256757/126114177-2c9fbbff-6804-4d9c-a350-e5512eea2240.gif)
 
 ## dependencies
 
