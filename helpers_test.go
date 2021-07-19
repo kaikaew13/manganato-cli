@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"testing"
 
@@ -86,6 +87,8 @@ func TestGetInitialScreen(t *testing.T) {
 	if len(*mgs) != len(screen.sl.Mangas) {
 		t.Errorf("wanted mangas with length %d, got %d", len(*mgs), len(screen.sl.Mangas))
 	}
+
+	g = nil
 }
 
 func TestGetMangaScreen(t *testing.T) {
@@ -111,6 +114,21 @@ func TestGetMangaScreen(t *testing.T) {
 	if !reflect.DeepEqual(screen.md.Manga, *mg) {
 		t.Errorf("manga fields are not equal:\n wanted %v, got %v", *mg, screen.md.Manga)
 	}
+
+	g = nil
+}
+
+func TestGetDirPath(t *testing.T) {
+	dirpath, err := getDirPath("test", "1")
+	if err != nil {
+		t.Errorf("not expected to have error: %s", err.Error())
+	}
+
+	_, err = os.Stat(dirpath)
+	if err != nil && os.IsNotExist(err) {
+		t.Error("directory does not exist")
+	}
+	os.RemoveAll("test")
 }
 
 func initHelper(t testing.TB) (g *gocui.Gui, maxX, maxY int) {
