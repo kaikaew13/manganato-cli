@@ -88,11 +88,9 @@ func getInitialScreen() error {
 // a specific manga's info then displays
 // to MangaDetails and ChapterList views
 func getMangaScreen(s string) error {
-
 	// checks if the line selected is a valid manga name
 	if strings.HasPrefix(s, views.Selector) {
 		mgName, mgId := getMangaNameAndID(s, len(views.Selector))
-
 		mg, err := screen.searcher.PickManga(mgId)
 		if err != nil {
 			return err
@@ -208,6 +206,7 @@ func processCommand(g *gocui.Gui, v *gocui.View) {
 	g.Update(func(g *gocui.Gui) error {
 		defer wg.Done()
 		s := v.Buffer()
+		s = strings.TrimSpace(s)
 
 		// returns the cursor to its origin
 		// and clear the SearchBar after user
@@ -218,7 +217,7 @@ func processCommand(g *gocui.Gui, v *gocui.View) {
 		}
 		v.Clear()
 
-		valid, cmd, args := validateCommand(s[:len(s)-1])
+		valid, cmd, args := validateCommand(s)
 		if valid {
 			val = valid
 			// saves a valid command to SearchBar's Commands slice
