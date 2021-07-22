@@ -2,7 +2,7 @@
 
 Unofficial Manganato's manga downloader CUI written in Go.
 
-**note:** currently works on Mac and Linux (the UI is broken on Windows)
+**note:** currently works on Mac and Linux
 
 ## preview
 
