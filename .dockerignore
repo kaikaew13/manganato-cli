@@ -1,0 +1,6 @@
+.gitignore
+.DS_Store
+*.exe
+manganato-cli
+download
+Makefile
