@@ -2,7 +2,7 @@
 
 Unofficial Manganato's manga downloader CUI written in Go.
 
-**note:** currently works on Mac and Linux, for Windows, please run via Docker and WSL (see [docker](###for-docker))
+**note:** currently works on Mac and Linux, for Windows, please run via Docker and WSL (see [docker](#for-docker))
 
 ## preview
 
