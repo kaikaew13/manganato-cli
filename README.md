@@ -2,7 +2,7 @@
 
 Unofficial Manganato's manga downloader CUI written in Go.
 
-**note:** currently works on Mac and Linux
+**note:** currently works on Mac and Linux, for Windows, please run via Docker and WSL (see [docker](###for-docker))
 
 ## preview
 
@@ -19,6 +19,16 @@ Unofficial Manganato's manga downloader CUI written in Go.
 git clone https://github.com/kaikaew13/manganato-cli.git
 cd manganato-cli
 go build
+./manganato-cli
+```
+
+### for docker
+
+```
+git clone https://github.com/kaikaew13/manganato-cli.git
+cd manganato-cli
+make docker_build
+make docker_run
 ```
 
 ## features
@@ -34,12 +44,6 @@ go build
 **note:** the downloaded chapters can be found in Desktop/manganato-cli directory
 
 ## usage
-
-to start the app:
-
-```
-./manganato-cli
-```
 
 list of commands:
 
