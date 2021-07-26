@@ -288,16 +288,26 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 		return err
 	}
 
+	return downloadPages(pgs, dirpath)
+}
+
+func downloadPages(pgs []nato.Page, outputdir string) error {
+	err := downloadPagesNowait(pgs, outputdir)
+	wg.Wait()
+	return err
+}
+
+func downloadPagesNowait(pgs []nato.Page, outputdir string) error {
 	wg.Add(len(pgs))
 
 	// downloads each page concurrently
 	for _, pg := range pgs {
-
+		var err error
 		go func(id, url string) {
 			defer wg.Done()
 
 			// each page downloaded will have a name of <id>.jpg
-			fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", id))
+			fp := filepath.Join(outputdir, fmt.Sprintf("%s.jpg", id))
 
 			err = downloadPage(fp, url)
 		}(pg.ID, pg.ImageURL)
@@ -306,8 +316,6 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 			return err
 		}
 	}
-
-	wg.Wait()
 
 	return nil
 }
