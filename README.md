@@ -1,6 +1,6 @@
 # manganato-cli
 
-Unofficial Manganato's manga downloader CUI written in Go.
+Unofficial Manganato's manga downloader CUI and CLI written in Go.
 
 **note:** currently works on Mac and Linux, for Windows, please run via Docker and WSL (see [docker](#for-docker))
 
@@ -79,3 +79,4 @@ keybindings:
 
 - [gocui](https://github.com/jroimartin/gocui) for CUI
 - [gocolly](https://github.com/gocolly/colly) for web scraper
+- [mellotanica](https://github.com/mellotanica) for CLI mode
