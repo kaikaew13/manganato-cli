@@ -1,12 +1,14 @@
 # manganato-cli
 
-Unofficial Manganato's manga downloader CUI and CLI written in Go.
+Unofficial Manganato's manga downloader CUI and [CLI](https://github.com/kaikaew13/manganato-cli/blob/main/CLI.md) written in Go.
 
 **note:** currently works on Mac and Linux, for Windows, please run via Docker and WSL (see [docker](#for-docker))
 
 ## preview
 
 ![mangagif](https://user-images.githubusercontent.com/77256757/126114177-2c9fbbff-6804-4d9c-a350-e5512eea2240.gif)
+
+**for the preview of CLI mode see [CLI.md](https://github.com/kaikaew13/manganato-cli/blob/main/CLI.md)**
 
 ## dependencies
 
