@@ -1,7 +1,11 @@
 package main
 
 import (
+	"errors"
+	"flag"
+	"fmt"
 	"log"
+	"os"
 	"sync"
 
 	"github.com/jroimartin/gocui"
@@ -11,12 +15,7 @@ import (
 
 var wg sync.WaitGroup
 
-func main() {
-
-	// gets the Searcher for fetching
-	// data manganato
-	screen.searcher = nato.NewSearcher()
-
+func runCui() {
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
@@ -84,5 +83,46 @@ func main() {
 	// starts the gocui's main loop
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
 		log.Panicln(err)
+	}
+}
+
+func main() {
+	mangaQuery := flag.String(searchCommand, "", "search manga based on title pattern")
+
+	mangaId := flag.String("manga-id", "", "download/show resources of selected manga id")
+
+	downloadSelection := flag.String("download", "", "download manga chapters ('-' to download all, chapters numbers to download specific chapters, comma-separated lists or dash-ranges to perform batch download)")
+	downloadPath := flag.String("output", ".", "downloaded images will be put in this path")
+
+	alltogether := flag.Bool("all-together", false, "download all chapters in parallel (may lead to errors for too much requests)")
+	ignoreerrors := flag.Bool("ignore-errors", false, "ignore download errors and keep going")
+
+	flag.Parse()
+
+	// gets the Searcher for fetching
+	// data manganato
+	screen.searcher = nato.NewSearcher()
+
+	var err error = nil
+	if *mangaQuery != "" {
+		err = printList(searchManga(*mangaQuery))
+		fmt.Printf("\nTo list manga chapters run '%v -manga-id MANGAID', where MANGAID is the value between square braces in the list above\n", os.Args[0])
+	} else if *mangaId != "" {
+		if *downloadSelection != "" {
+			err = downloadChapters(*mangaId, *downloadSelection, *downloadPath, !*alltogether, *ignoreerrors)
+		} else {
+			err = printList(listChapters(*mangaId))
+			fmt.Printf("\nTo download chapters run '%v -manga-id %v -download SELECTION', where SELECTION is a list or single value from those between square braces in the list above\n", os.Args[0], *mangaId)
+		}
+	} else if *downloadSelection != "" {
+		flag.PrintDefaults()
+		err = errors.New("no manga-id specified")
+	} else {
+		runCui()
+	}
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
 }

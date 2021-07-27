@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -16,8 +17,9 @@ import (
 )
 
 const (
-	manganatoURL  string = "https://readmanganato.com/"
-	modalViewName string = "Modal"
+	manganatoURL       string = "https://readmanganato.com/"
+	modalViewName      string = "Modal"
+	maxDownloadRetries int    = 7
 
 	// list of commands
 	searchCommand         string = "search"
@@ -288,26 +290,41 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 		return err
 	}
 
+	return downloadPages(pgs, dirpath)
+}
+
+func downloadPages(pgs []nato.Page, outputdir string) error {
+	err := downloadPagesNowait(pgs, outputdir)
+	wg.Wait()
+	return err
+}
+
+func downloadPagesNowait(pgs []nato.Page, outputdir string) error {
 	wg.Add(len(pgs))
 
+	rch := make(chan error)
 	// downloads each page concurrently
 	for _, pg := range pgs {
-
-		go func(id, url string) {
+		go func(id, url string, res chan error) {
 			defer wg.Done()
 
 			// each page downloaded will have a name of <id>.jpg
-			fp := filepath.Join(dirpath, fmt.Sprintf("%s.jpg", id))
+			fp := filepath.Join(outputdir, fmt.Sprintf("%s.jpg", id))
 
-			err = downloadPage(fp, url)
-		}(pg.ID, pg.ImageURL)
+			err := downloadPage(fp, url)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error loading page %v: %v", id, err)
+			}
+			res <- err
+		}(pg.ID, pg.ImageURL, rch)
+	}
 
+	for i := 0; i < len(pgs); i++ {
+		err := <-rch
 		if err != nil {
 			return err
 		}
 	}
-
-	wg.Wait()
 
 	return nil
 }
@@ -340,20 +357,31 @@ func downloadPage(fp, url string) error {
 
 	client := &http.Client{}
 
-	res, err := client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
+	for retries := maxDownloadRetries; retries > 0; retries-- {
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-	f, err := os.Create(fp)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
+		if res.StatusCode >= 400 && res.StatusCode < 500 {
+			return errors.New(res.Status)
+		}
 
-	_, err = io.Copy(f, res.Body)
-	return err
+		if res.StatusCode == 200 {
+			f, err := os.Create(fp)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+
+			_, err = io.Copy(f, res.Body)
+			return err
+		}
+
+		fmt.Printf("Download error: %v, retrying\n", res.Status)
+	}
+	return errors.New("Too much retries")
 }
 
 // resets cursor to its origin (for SearchList, MangaDetails
