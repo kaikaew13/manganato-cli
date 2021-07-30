@@ -22,6 +22,7 @@ const (
 	modalViewName         string = "Modal"
 	maxDownloadRetries    int    = 7
 	downloadTimeoutSecond int    = 2
+	maxURLLength          int    = 200
 
 	// list of commands
 	searchCommand         string = "search"
@@ -292,7 +293,6 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 		return err
 	}
 
-	// return downloadPages(pgs, dirpath)
 	return downloadPagesNowait(pgs, dirpath)
 }
 
@@ -316,7 +316,9 @@ func downloadPagesNowait(pgs []nato.Page, outputdir string) error {
 
 			err := downloadPage(fp, url)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error loading page %v: %v", id, err)
+				if !cuiMode {
+					fmt.Fprintf(os.Stderr, "Error loading page %v: %v", id, err)
+				}
 			}
 			res <- err
 		}(pg.ID, pg.ImageURL, rch)
@@ -351,6 +353,10 @@ func getDirPath(homedir, chapterName string) (dirpath string, err error) {
 // makes a request to manganato to download
 // the page and saves it to the specified filepath
 func downloadPage(fp, url string) error {
+	if len(url) > maxURLLength {
+		return fmt.Errorf("this url has length of %d, which is too long", len(url))
+	}
+
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
@@ -382,7 +388,9 @@ func downloadPage(fp, url string) error {
 			return err
 		}
 
-		fmt.Printf("Download error: %v, retrying\n", res.Status)
+		if !cuiMode {
+			fmt.Printf("Download error: %v, retrying\n", res.Status)
+		}
 	}
 	return errors.New("too much retries")
 }

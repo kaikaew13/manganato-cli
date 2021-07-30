@@ -14,8 +14,11 @@ import (
 )
 
 var wg sync.WaitGroup
+var cuiMode bool
 
 func runCui() {
+	cuiMode = true
+
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
 		log.Panicln(err)
