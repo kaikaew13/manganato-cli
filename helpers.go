@@ -30,6 +30,11 @@ const (
 	searchByGenreCommand         = searchCommand + "-genre"
 )
 
+var (
+	wg      sync.WaitGroup
+	cuiMode bool
+)
+
 // is called on every iteration of g.Mainloop.
 // adjusts views dimension dynamically in case
 // user resize the screen
