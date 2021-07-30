@@ -169,7 +169,7 @@ func downloadChapters(mangaid string, chapterspec string, destination string, on
 			}
 		}
 
-		chdir := path.Join(basedir, fmt.Sprintf("%d", chapter.index))
+		chdir := path.Join(basedir, fmt.Sprintf("%d - %s", chapter.index, chapter.chapter.ChapterName))
 		os.MkdirAll(chdir, 0755)
 
 		fmt.Printf("downloading chapter: '%v' to %v\n", chapter.chapter.ChapterName, chdir)
