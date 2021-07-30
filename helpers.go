@@ -9,6 +9,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/jroimartin/gocui"
@@ -17,9 +18,10 @@ import (
 )
 
 const (
-	manganatoURL       string = "https://readmanganato.com/"
-	modalViewName      string = "Modal"
-	maxDownloadRetries int    = 7
+	manganatoURL          string = "https://readmanganato.com/"
+	modalViewName         string = "Modal"
+	maxDownloadRetries    int    = 7
+	downloadTimeoutSecond int    = 2
 
 	// list of commands
 	searchCommand         string = "search"
@@ -408,14 +410,15 @@ func resetCursor(v *gocui.View) {
 // downloading files
 func openModal(g *gocui.Gui) error {
 	maxX, maxY := g.Size()
-	if lv, err := g.SetView(modalViewName, maxX/2-10, maxY/2-2, maxX/2+10, maxY/2+2); err != nil {
+	if lv, err := g.SetView(modalViewName, maxX/2-15, maxY/2-2, maxX/2+15, maxY/2+2); err != nil {
 		if err != gocui.ErrUnknownView {
 			return err
 		}
 
 		lv.BgColor = gocui.ColorBlack
 		lv.FgColor = gocui.ColorWhite
-		lv.Write([]byte("\n\n\t\t\t\t\tLoading..."))
+		lv.Wrap = true
+		lv.Write([]byte("\n\n\t\t\t\t\t\t\t\t\tLoading..."))
 
 		g.Cursor = false
 		g.SetViewOnTop(lv.Name())
@@ -427,7 +430,7 @@ func openModal(g *gocui.Gui) error {
 
 func closeModal(g *gocui.Gui) error {
 	lv, err := g.View(modalViewName)
-	if err != nil {
+	if err != nil && err != gocui.ErrUnknownView {
 		return err
 	}
 	// must clear buffers in the modal
@@ -444,10 +447,12 @@ func closeModal(g *gocui.Gui) error {
 // sets a modal message to msg then close
 // the modal after one second
 func setClosingMessage(g *gocui.Gui, msg string) {
-	wg.Add(1)
+	var wgg sync.WaitGroup
+
+	wgg.Add(1)
 
 	g.Update(func(g *gocui.Gui) error {
-		defer wg.Done()
+		defer wgg.Done()
 		lv, err := g.View(modalViewName)
 		if err != nil {
 			return err
@@ -460,7 +465,7 @@ func setClosingMessage(g *gocui.Gui, msg string) {
 	})
 
 	// waits for message updating process
-	wg.Wait()
+	wgg.Wait()
 
 	// then closes the modal after one second
 	g.Update(func(g *gocui.Gui) error {

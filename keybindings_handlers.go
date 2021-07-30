@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/jroimartin/gocui"
 )
 
@@ -110,21 +112,33 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 		return err
 	}
 
+	done := make(chan bool)
+	timer := time.NewTimer(time.Second * time.Duration(downloadTimeoutSecond))
+
 	// must run downloading process in
 	// go routine or else the it will
 	// block the openModal so loading modal
 	// will not be shown to the user
 	go func() {
-		g.Update(func(g *gocui.Gui) error {
-			s := trimViewLine(v)
+		s := trimViewLine(v)
+		prepDownloadChapter(s)
+		done <- true
+	}()
 
-			if err := prepDownloadChapter(s); err != nil {
-				return nil
-			}
-
-			err := closeModal(g)
-			return err
-		})
+	// in case downloading takes longer than
+	// downloadTimeoutSecond, close the modal
+	// and continue to download in background
+	go func() {
+		select {
+		case <-timer.C:
+			setClosingMessage(g, "continuing to download\nin background...")
+			return
+		case <-done:
+			g.Update(func(g *gocui.Gui) error {
+				err := closeModal(g)
+				return err
+			})
+		}
 	}()
 
 	return nil
