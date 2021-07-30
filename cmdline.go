@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -65,7 +64,7 @@ func listChapters(mangaid string) (out []string, err error) {
 
 func indexToChapter(chapter int, manga nato.Manga) (*Chapter, error) {
 	if chapter > len(manga.Chapters) || chapter < 1 {
-		return nil, errors.New(fmt.Sprintf("chapter '%v' out of range (1 - %v)", chapter, len(manga.Chapters)))
+		return nil, fmt.Errorf("chapter '%v' out of range (1 - %v)", chapter, len(manga.Chapters))
 	}
 	return &Chapter{
 		&manga.Chapters[len(manga.Chapters)-chapter],

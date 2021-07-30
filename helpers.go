@@ -290,7 +290,8 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 		return err
 	}
 
-	return downloadPages(pgs, dirpath)
+	// return downloadPages(pgs, dirpath)
+	return downloadPagesNowait(pgs, dirpath)
 }
 
 func downloadPages(pgs []nato.Page, outputdir string) error {
@@ -381,7 +382,7 @@ func downloadPage(fp, url string) error {
 
 		fmt.Printf("Download error: %v, retrying\n", res.Status)
 	}
-	return errors.New("Too much retries")
+	return errors.New("too much retries")
 }
 
 // resets cursor to its origin (for SearchList, MangaDetails
