@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/jroimartin/gocui"
 )
 
@@ -110,21 +113,45 @@ func pickChapter(g *gocui.Gui, v *gocui.View) error {
 		return err
 	}
 
+	done := make(chan bool)
+	timer := time.NewTimer(time.Second * 1)
+
+	go func() {
+		s := trimViewLine(v)
+		prepDownloadChapter(s)
+		done <- true
+	}()
+
 	// must run downloading process in
 	// go routine or else the it will
 	// block the openModal so loading modal
 	// will not be shown to the user
 	go func() {
-		g.Update(func(g *gocui.Gui) error {
-			s := trimViewLine(v)
 
-			if err := prepDownloadChapter(s); err != nil {
-				return nil
-			}
+		// g.Update(func(g *gocui.Gui) error {
+		// 	s := trimViewLine(v)
+		// 	if err := prepDownloadChapter(s); err != nil {
+		// 		return err
+		// 	}
 
-			err := closeModal(g)
-			return err
-		})
+		// 	done <- true
+		// 	return nil
+		// })
+
+		select {
+		case <-timer.C:
+			setClosingMessage(g, "downloading takes too long, try again later")
+			return
+		case <-done:
+			g.Update(func(g *gocui.Gui) error {
+				err := closeModal(g)
+				if err == gocui.ErrUnknownView {
+					log.Panic("YEY")
+				}
+				return err
+			})
+		}
+
 	}()
 
 	return nil

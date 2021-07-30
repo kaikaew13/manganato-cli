@@ -290,7 +290,8 @@ func downloadChapter(pgs []nato.Page, chapterName string) error {
 		return err
 	}
 
-	return downloadPages(pgs, dirpath)
+	// return downloadPages(pgs, dirpath)
+	return downloadPagesNowait(pgs, dirpath)
 }
 
 func downloadPages(pgs []nato.Page, outputdir string) error {
@@ -381,7 +382,7 @@ func downloadPage(fp, url string) error {
 
 		fmt.Printf("Download error: %v, retrying\n", res.Status)
 	}
-	return errors.New("Too much retries")
+	return errors.New("too much retries")
 }
 
 // resets cursor to its origin (for SearchList, MangaDetails
@@ -414,6 +415,7 @@ func openModal(g *gocui.Gui) error {
 
 		lv.BgColor = gocui.ColorBlack
 		lv.FgColor = gocui.ColorWhite
+		lv.Wrap = true
 		lv.Write([]byte("\n\n\t\t\t\t\tLoading..."))
 
 		g.Cursor = false
@@ -426,7 +428,7 @@ func openModal(g *gocui.Gui) error {
 
 func closeModal(g *gocui.Gui) error {
 	lv, err := g.View(modalViewName)
-	if err != nil {
+	if err != nil && err != gocui.ErrUnknownView {
 		return err
 	}
 	// must clear buffers in the modal
